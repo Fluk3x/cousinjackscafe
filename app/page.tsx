@@ -39,7 +39,7 @@ export default function Home() {
             <SectionHeading
               align="center"
               kicker="Full menu"
-              title="Breakfast, toasties, burgers, coffee and drinks, all in one place."
+              title="Breakfast, toasties, sandwiches, burgers, coffee and drinks, all in one place."
             />
             <MenuBoard categories={menuCategories} className="mt-7" />
           </div>
@@ -60,7 +60,7 @@ export default function Home() {
             <SectionHeading
               align="center"
               title="Find us in Guildford"
-              copy="Drop in for coffee, breakfast, toasties and burgers. Good food, strong coffee and friendly local service."
+              copy="Drop in for coffee, breakfast, toasties, sandwiches and burgers. Good food, strong coffee and friendly local service."
             />
             <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
               <a

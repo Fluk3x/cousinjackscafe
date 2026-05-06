@@ -11,7 +11,7 @@ import { MENU_CATEGORY_ANCHOR_ID } from "@/lib/menu-data";
 const chips = [
   { label: "Fresh coffee", icon: Coffee, categoryId: "coffee" },
   { label: "Breakfast rolls", icon: Croissant, categoryId: "breakfast" },
-  { label: "Toasties", icon: Sandwich, categoryId: "sandwiches" },
+  { label: "Sandwiches", icon: Sandwich, categoryId: "sandwiches" },
   { label: "Burgers", icon: Beef, categoryId: "burgers" },
   { label: "Cold drinks", icon: CupSoda, categoryId: "cold-drinks" },
 ] as const;
