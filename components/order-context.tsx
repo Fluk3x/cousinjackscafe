@@ -17,6 +17,8 @@ type OrderContextValue = {
   removeLine: (lineId: string) => void;
   subtotalCents: number;
   customizeTarget: BoardMenuItem | null;
+  /** Bumps on every `openCustomize` so the modal can reset scroll even for the same menu item. */
+  customizeOpenSeq: number;
   openCustomize: (item: BoardMenuItem) => void;
   closeCustomize: () => void;
 };
@@ -36,9 +38,13 @@ export function useOrderCart() {
 export function OrderProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<CartLine[]>([]);
   const [customizeTarget, setCustomizeTarget] = useState<BoardMenuItem | null>(null);
+  const [customizeOpenSeq, setCustomizeOpenSeq] = useState(0);
 
   const openCustomize = useCallback((item: BoardMenuItem) => {
-    if (item.customization) setCustomizeTarget(item);
+    if (item.customization) {
+      setCustomizeTarget(item);
+      setCustomizeOpenSeq((n) => n + 1);
+    }
   }, []);
 
   const closeCustomize = useCallback(() => setCustomizeTarget(null), []);
@@ -61,10 +67,11 @@ export function OrderProvider({ children }: { children: ReactNode }) {
       removeLine,
       subtotalCents,
       customizeTarget,
+      customizeOpenSeq,
       openCustomize,
       closeCustomize,
     }),
-    [cart, addToCart, removeLine, subtotalCents, customizeTarget, openCustomize, closeCustomize],
+    [cart, addToCart, removeLine, subtotalCents, customizeTarget, customizeOpenSeq, openCustomize, closeCustomize],
   );
 
   return <OrderContext.Provider value={value}>{children}</OrderContext.Provider>;

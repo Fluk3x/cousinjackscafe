@@ -21,7 +21,7 @@ export function PopularPicks({ items }: { items: PopularPickHighlight[] }) {
         const inner = (
           <>
             <div className="relative w-full overflow-hidden rounded-[1.05rem]">
-              <span className="pointer-events-none absolute left-2.5 top-2.5 z-[2] inline-flex items-center gap-1 rounded-full border border-[rgba(246,182,74,0.35)] bg-[rgba(12,10,9,0.78)] px-2.5 py-1 backdrop-blur-sm">
+              <span className="pointer-events-none absolute left-1/2 top-2.5 z-[2] inline-flex -translate-x-1/2 items-center gap-1 rounded-full border border-[rgba(246,182,74,0.35)] bg-[rgba(12,10,9,0.78)] px-2.5 py-1 backdrop-blur-sm">
                 <Sparkles aria-hidden className="size-3 shrink-0 text-[var(--cj-gold)]" />
                 <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[var(--cj-gold)]">Popular</span>
               </span>

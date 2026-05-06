@@ -32,6 +32,9 @@ export type ItemCustomizationConfig = {
   /** Second radio group at the same base price (e.g. burger sauce amount) */
   secondarySectionTitle?: string;
   secondaryChoices?: RollVariantChoice[];
+  /** Sandwich toast picker - rendered last in the customise modal below Remove (optional). */
+  toastSectionTitle?: string;
+  toastChoices?: RollVariantChoice[];
   /** Sauces / spreads for items where flavour is not the primary picker (sandwiches, light breakfast) */
   sauceSectionTitle?: string;
   sauceChoices?: RollVariantChoice[];
@@ -316,9 +319,9 @@ function burgerSaucePrimaries(baseCents: number, priceLabel: string, listed: Bur
 
   if (listed === "special") {
     return [
+      specialAsListed,
       { id: "sauce-bbq", label: "BBQ sauce", price: priceLabel, priceCents: baseCents },
       { id: "sauce-tomato", label: "Tomato sauce", price: priceLabel, priceCents: baseCents },
-      specialAsListed,
       { id: "sauce-mayo", label: "Mayo", price: priceLabel, priceCents: baseCents },
       { id: "sauce-none", label: "No sauce", price: priceLabel, priceCents: baseCents },
     ];
@@ -354,11 +357,16 @@ function burgerCustom(
   removals: RemovalChoice[],
   burgerExtras: RollAddOn[],
 ): ItemCustomizationConfig {
+  const sauceAsIncluded = burgerSaucePrimaries(baseCents, priceLabel, listedSauce).map((c) => ({
+    ...c,
+    price: SAUCE_INCLUDED,
+    priceCents: 0,
+  }));
   return {
-    primarySectionTitle: "Sauce",
-    primaryChoices: burgerSaucePrimaries(baseCents, priceLabel, listedSauce),
     secondarySectionTitle: "How much sauce",
     secondaryChoices: burgerSauceAmount,
+    sauceSectionTitle: "Sauce",
+    sauceChoices: sauceAsIncluded,
     comboAddOns: [CHIPS_COMBO_ADDON],
     addOns: burgerExtras,
     removals,
@@ -373,8 +381,8 @@ const coffeeStyle = (sizes: RollVariantChoice[]): ItemCustomizationConfig => ({
 });
 
 const sandwichCustom = (addOns: RollAddOn[], removals: RemovalChoice[], sauceChoices: RollVariantChoice[]): ItemCustomizationConfig => ({
-  primarySectionTitle: "Toast level",
-  primaryChoices: [
+  toastSectionTitle: "Toast level",
+  toastChoices: [
     { id: "toast-std", label: "Standard toast", price: "$13.50", priceCents: 1350 },
     { id: "toast-crisp", label: "Extra crispy toast", price: "$13.50", priceCents: 1350 },
   ],
