@@ -65,10 +65,10 @@ export function AnimatedHero() {
             className="mx-auto mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center lg:mx-0 lg:items-start lg:justify-start"
           >
             <a href="#full-menu" className="primary-button shrink-0">
-              View menu <ArrowRight aria-hidden size={18} />
+              View Menu <ArrowRight aria-hidden size={18} />
             </a>
             <a href={cafe.googleMapsUrl} target="_blank" rel="noreferrer" className="secondary-button shrink-0">
-              <MapPin aria-hidden size={18} /> Get directions
+              <MapPin aria-hidden size={18} /> Get Directions
             </a>
           </motion.div>
 

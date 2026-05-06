@@ -23,6 +23,8 @@ export type RollAddOn = {
 export type RemovalChoice = {
   id: string;
   name: string;
+  /** When set, "Remove" only shows this row for these primary variant ids */
+  primaryVariantIds?: readonly string[];
 };
 
 export type ItemCustomizationConfig = {
@@ -40,7 +42,16 @@ export type ItemCustomizationConfig = {
   sauceChoices?: RollVariantChoice[];
   /** Shown above other extras (single row today: chips combo). */
   comboAddOns?: RollAddOn[];
+  /**
+   * Rendered first in "Ingredients" above "Add extras".
+   * Included in bundle sync, pricing, and line detail (e.g. toastie fillings).
+   */
+  ingredientAddOns?: RollAddOn[];
   milkOptions?: { id: string; label: string; priceCents: number }[];
+  /** Infer primary by exact set equality of filling add-ons ↔ variant bundle; `primaryCustomFillVariantId` catches leftovers. */
+  primaryInferExactFillings?: boolean;
+  /** Fallback primary id when fillings do not match any named combo. */
+  primaryCustomFillVariantId?: string;
   addOns?: RollAddOn[];
   removals?: RemovalChoice[];
 };
@@ -190,21 +201,20 @@ function burgerSides(bacon: "Bacon" | "Extra Bacon"): RollAddOn[] {
   ];
 }
 
-/** Plain toastie: optional rasher Bacon; Egg row when sandwich has none; Extra Cheese atop listed ham and cheese slices. */
-const HAM_CHEESE_TOASTIE_ADDONS: RollAddOn[] = [
-  { id: "extra-bacon", name: "Bacon", priceCents: 400 },
-  { id: "extra-egg", name: "Egg", priceCents: 200 },
-  { id: "cheese", name: "Extra Cheese", priceCents: 150 },
-  { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
+/** Toastie fillings — order matches modal; exact-set inference maps to named toasties. */
+const TOASTIE_FILL_ADDONS: RollAddOn[] = [
+  { id: "toastie-avo", name: "Avocado", priceCents: 450, excludeForVariantIds: ["avocado"] },
+  { id: "toastie-tomato", name: "Tomato", priceCents: 150, excludeForVariantIds: ["cheese-tomato", "ham-cheese-tomato"] },
+  { id: "toastie-ham", name: "Ham", priceCents: 250, excludeForVariantIds: ["ham-cheese", "ham-cheese-tomato"] },
+  {
+    id: "toastie-cheese",
+    name: "Cheese",
+    priceCents: 150,
+    excludeForVariantIds: ["cheese", "cheese-tomato", "ham-cheese", "ham-cheese-tomato"],
+  },
 ];
 
-/** Avocado-only toastie. */
-const AVOCADO_TOASTIE_ADDONS: RollAddOn[] = [
-  { id: "extra-bacon", name: "Bacon", priceCents: 400 },
-  { id: "extra-egg", name: "Egg", priceCents: 200 },
-  { id: "cheese", name: "Cheese", priceCents: 150 },
-  { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
-];
+const TOASTIE_EXTRA_ADDONS: RollAddOn[] = [{ id: "toastie-extra-cheese", name: "Extra Cheese", priceCents: 150 }];
 
 /** Halloumi wrap lists grilled halloumi + egg etc.; rashers Bacon, extra fried egg wording kept. */
 const HALLUMI_WRAP_ADDONS: RollAddOn[] = [
@@ -240,6 +250,15 @@ const baconEggVariantsWrap: RollVariantChoice[] = [
   },
 ];
 
+const toastieVariants: RollVariantChoice[] = [
+  { id: "cheese", label: "Cheese Toastie", price: "$8.00", priceCents: 800 },
+  { id: "cheese-tomato", label: "Cheese & Tomato Toastie", price: "$8.00", priceCents: 800 },
+  { id: "ham-cheese", label: "Ham & Cheese Toastie", price: "$8.00", priceCents: 800 },
+  { id: "ham-cheese-tomato", label: "Ham, Cheese & Tomato Toastie", price: "$8.00", priceCents: 800 },
+  { id: "avocado", label: "Avocado Toastie", price: "$8.00", priceCents: 800 },
+  { id: "toastie-custom", label: "Custom Combination", price: "$8.00", priceCents: 800 },
+];
+
 /** Rolls + parity wraps share these rows; bundle rows follow `excludeForVariantIds`. */
 const baconEggStyleAddOns: RollAddOn[] = [
   { id: "extra-bacon", name: "Extra Bacon", priceCents: 400, excludeForVariantIds: ["double-bacon", "monster"] },
@@ -263,6 +282,14 @@ const breakfastSauceNoDefault: RollVariantChoice[] = [
   { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
   { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
   { id: "sauce-mayo", label: "Mayo", price: SAUCE_INCLUDED, priceCents: 0 },
+];
+
+/** Toastie only — right column stays empty at $0 like milk (no "Included" wording). */
+const toastieSauceChoices: RollVariantChoice[] = [
+  { id: "sauce-none", label: "No Sauce", price: "", priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: "", priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: "", priceCents: 0 },
+  { id: "sauce-mayo", label: "Mayo", price: "", priceCents: 0 },
 ];
 
 const sandwichSauceMayoDefault: RollVariantChoice[] = [
@@ -439,29 +466,20 @@ export const menuCategories: BoardMenuCategory[] = [
         },
       },
       {
-        id: "ham-cheese-toastie",
-        name: "Ham, Cheese & Tomato Toastie",
-        description: "",
-        price: "$8.00",
+        id: "toastie",
+        name: "Toastie",
+        description: "Cheese; Cheese & Tomato; Ham & Cheese; Ham, Cheese & Tomato; Avocado.",
+        price: "From $8.00",
         basePriceCents: 800,
         customization: {
-          addOns: HAM_CHEESE_TOASTIE_ADDONS,
+          primarySectionTitle: "Choose Version",
+          primaryChoices: toastieVariants,
+          primaryInferExactFillings: true,
+          primaryCustomFillVariantId: "toastie-custom",
+          ingredientAddOns: TOASTIE_FILL_ADDONS,
+          addOns: TOASTIE_EXTRA_ADDONS,
           sauceSectionTitle: "Sauce",
-          sauceChoices: breakfastSauceNoDefault,
-          removals: [rm.ham, rm.cheese, rm.tomato],
-        },
-      },
-      {
-        id: "avocado-toastie",
-        name: "Avocado Toastie",
-        description: "",
-        price: "$8.00",
-        basePriceCents: 800,
-        customization: {
-          addOns: AVOCADO_TOASTIE_ADDONS,
-          sauceSectionTitle: "Sauce",
-          sauceChoices: breakfastSauceNoDefault,
-          removals: [rm.avocado],
+          sauceChoices: toastieSauceChoices,
         },
       },
     ],

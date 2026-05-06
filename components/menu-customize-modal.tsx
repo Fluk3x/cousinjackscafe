@@ -4,7 +4,19 @@ import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "re
 import { X } from "lucide-react";
 import { useOrderCart } from "@/components/order-context";
 import { cafe } from "@/lib/content";
-import { audFromCents, type BoardMenuItem, type RollAddOn, type RollVariantChoice } from "@/lib/menu-data";
+import {
+  audFromCents,
+  type BoardMenuItem,
+  type RemovalChoice,
+  type RollAddOn,
+  type RollVariantChoice,
+} from "@/lib/menu-data";
+
+function removalShownForPrimaryVariant(r: RemovalChoice, variantId: string): boolean {
+  const ids = r.primaryVariantIds;
+  if (!ids?.length) return true;
+  return ids.includes(variantId);
+}
 
 const NO_COMBO_ADDONS: RollAddOn[] = [];
 
@@ -16,9 +28,40 @@ function bundledAddonIdsForVariant(variantId: string, rows: RollAddOn[]): Set<st
   return s;
 }
 
+/** Set equality for exact toastie filling ↔ bundle matching. */
+function setsEqualSets(a: Set<string>, b: Set<string>): boolean {
+  if (a.size !== b.size) return false;
+  for (const x of a) if (!b.has(x)) return false;
+  return true;
+}
+
 /**
- * Highest-specificity version whose bundled extras are all selected (ties: lower index wins).
+ * Used for toastie: selected filling checkboxes must exactly match a named combo, else `customVariantId`.
  */
+function inferPrimaryIndexExactFillings(
+  primaryChoices: RollVariantChoice[],
+  allAddOnRows: RollAddOn[],
+  addOnIds: Set<string>,
+  customVariantId: string,
+): number {
+  const fillingRowIds = new Set(
+    allAddOnRows.filter((a) => (a.excludeForVariantIds?.length ?? 0) > 0).map((a) => a.id),
+  );
+  const selectedFill = new Set([...addOnIds].filter((id) => fillingRowIds.has(id)));
+
+  const customIdx = primaryChoices.findIndex((p) => p.id === customVariantId);
+
+  for (let i = 0; i < primaryChoices.length; i++) {
+    const p = primaryChoices[i];
+    if (p.id === customVariantId) continue;
+    const bundle = bundledAddonIdsForVariant(p.id, allAddOnRows);
+    if (setsEqualSets(bundle, selectedFill)) return i;
+  }
+
+  return customIdx >= 0 ? customIdx : 0;
+}
+
+/** Bacon & egg style: largest bundled subset of selected add-ons (ties: earlier index). */
 function inferVariantIndexFromAddons(
   primaryChoices: RollVariantChoice[],
   allAddOnRows: RollAddOn[],
@@ -58,6 +101,7 @@ function buildLineDetail(
   showSauceLine: boolean,
   milkLabel: string | undefined,
   comboAddOns: RollAddOn[],
+  ingredientAddOns: RollAddOn[],
   regularAddOns: RollAddOn[],
   addOnIds: Set<string>,
   variantId: string,
@@ -75,7 +119,7 @@ function buildLineDetail(
   if (showSecondaryLine && secondaryVariant) parts.push(secondaryVariant.label);
   if (showSauceLine && saucePick) parts.push(saucePick.label);
   if (milkLabel) parts.push(milkLabel);
-  const addOnOrder = [...comboAddOns, ...regularAddOns];
+  const addOnOrder = [...comboAddOns, ...ingredientAddOns, ...regularAddOns];
   for (const a of addOnOrder) {
     const bundled = !!(a.excludeForVariantIds?.includes(variantId));
     const selected = addOnIds.has(a.id);
@@ -113,10 +157,18 @@ export function MenuCustomizeModal() {
   const sauceChoices = custom?.sauceChoices ?? [];
   const comboAddOns = custom?.comboAddOns ?? NO_COMBO_ADDONS;
   const milkOptions = custom?.milkOptions ?? [];
+  const ingredientAddOns = custom?.ingredientAddOns ?? NO_COMBO_ADDONS;
   const addOns = custom?.addOns ?? [];
   const removals = custom?.removals ?? [];
   const allAddOnRows = useMemo<RollAddOn[]>(
-    () => (!custom ? [] : [...(custom.comboAddOns ?? NO_COMBO_ADDONS), ...(custom.addOns ?? [])]),
+    () =>
+      !custom
+        ? []
+        : [
+            ...(custom.comboAddOns ?? NO_COMBO_ADDONS),
+            ...(custom.ingredientAddOns ?? NO_COMBO_ADDONS),
+            ...(custom.addOns ?? NO_COMBO_ADDONS),
+          ],
     [custom],
   );
 
@@ -174,6 +226,11 @@ export function MenuCustomizeModal() {
   const toastPick = toastChoices[selectedToast];
   const showToastUi = toastChoices.length > 0;
 
+  const visibleRemovals = useMemo(
+    () => removals.filter((r) => removalShownForPrimaryVariant(r, variantId)),
+    [removals, variantId],
+  );
+
   const primaryBundlesAddOnPricing =
     primaryChoices.length > 1 &&
     allAddOnRows.some((a) => a.excludeForVariantIds?.some((id) => primaryChoices.some((p) => p.id === id)));
@@ -184,12 +241,25 @@ export function MenuCustomizeModal() {
    */
   useEffect(() => {
     if (!open || !item || !primaryBundlesAddOnPricing) return;
-    const inferred = inferVariantIndexFromAddons(primaryChoices, allAddOnRows, addOnIds);
+    const inferred =
+      custom?.primaryInferExactFillings && custom.primaryCustomFillVariantId
+        ? inferPrimaryIndexExactFillings(primaryChoices, allAddOnRows, addOnIds, custom.primaryCustomFillVariantId)
+        : inferVariantIndexFromAddons(primaryChoices, allAddOnRows, addOnIds);
     if (inferred !== selectedPrimary) {
       suppressPrimaryBundleSyncRef.current = true;
       setSelectedPrimary(inferred);
     }
-  }, [open, item, primaryBundlesAddOnPricing, primaryChoices, allAddOnRows, addOnIds, selectedPrimary]);
+  }, [
+    open,
+    item,
+    custom?.primaryInferExactFillings,
+    custom?.primaryCustomFillVariantId,
+    primaryBundlesAddOnPricing,
+    primaryChoices,
+    allAddOnRows,
+    addOnIds,
+    selectedPrimary,
+  ]);
 
   /** Turn off bundled add-ons for the previous variant, then apply this variant (+$0 on bundled lines). */
   useLayoutEffect(() => {
@@ -203,9 +273,12 @@ export function MenuCustomizeModal() {
     const prevVid = variantIdPrevRef.current;
     variantIdPrevRef.current = variantId;
 
+    const customFillId = custom?.primaryCustomFillVariantId;
+    const skipStripPrevBundles = !!(customFillId && variantId === customFillId);
+
     setAddOnIds((prev) => {
       const next = new Set(prev);
-      if (prevVid !== undefined && prevVid !== variantId) {
+      if (!skipStripPrevBundles && prevVid !== undefined && prevVid !== variantId) {
         for (const a of allAddOnRows) {
           if (a.excludeForVariantIds?.includes(prevVid)) next.delete(a.id);
         }
@@ -215,7 +288,23 @@ export function MenuCustomizeModal() {
       }
       return next;
     });
-  }, [open, item, variantId, allAddOnRows]);
+  }, [open, item, variantId, allAddOnRows, custom?.primaryCustomFillVariantId]);
+
+  useLayoutEffect(() => {
+    if (!open || removals.length === 0) return;
+    setRemovalIds((prev) => {
+      let changed = false;
+      const next = new Set(prev);
+      for (const id of prev) {
+        const r = removals.find((x) => x.id === id);
+        if (r && !removalShownForPrimaryVariant(r, variantId)) {
+          next.delete(id);
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [open, removals, variantId]);
 
   useEffect(() => {
     const el = dialogRef.current;
@@ -251,7 +340,7 @@ export function MenuCustomizeModal() {
     addOnsTotalCents;
 
   const milkLabelSel = milkOptions.length > 0 ? milkOptions[selectedMilk]?.label : undefined;
-  const removalNames = removals.filter((r) => removalIds.has(r.id)).map((r) => r.name);
+  const removalNames = visibleRemovals.filter((r) => removalIds.has(r.id)).map((r) => r.name);
 
   const toggleAddOn = (id: string) => {
     setAddOnIds((prev) => {
@@ -316,6 +405,7 @@ export function MenuCustomizeModal() {
       showSauceLine,
       milkLabelSel,
       comboAddOns,
+      ingredientAddOns,
       addOns,
       addOnIds,
       variantId,
@@ -339,7 +429,9 @@ export function MenuCustomizeModal() {
   const blockBeforeMilk = showPrimaryUi;
   const blockBeforeCombo = blockBeforeMilk || milkOptions.length > 0;
   const showComboUi = comboAddOns.length > 0;
-  const blockBeforeRegularAddons = blockBeforeCombo || showComboUi;
+  const blockBeforeIngredientAddons = blockBeforeCombo || showComboUi;
+  const showIngredientAddonsUi = ingredientAddOns.length > 0;
+  const blockBeforeRegularAddons = blockBeforeIngredientAddons || showIngredientAddonsUi;
   const blockBeforeSauceAfterExtras = blockBeforeRegularAddons || addOns.length > 0;
   const blockBeforeSecondaryAfterSauce = blockBeforeSauceAfterExtras || showSauceUi;
 
@@ -465,6 +557,17 @@ export function MenuCustomizeModal() {
               </div>
             ) : null}
 
+            {showIngredientAddonsUi ? (
+              <div className={blockBeforeIngredientAddons ? "mt-6" : "mt-4"}>
+                <fieldset className="space-y-2">
+                  <legend className="mb-2 w-full px-1 text-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--cj-orange)]">
+                    Ingredients
+                  </legend>
+                  {ingredientAddOns.map((a) => renderAddonCheckbox(a, "fill"))}
+                </fieldset>
+              </div>
+            ) : null}
+
             {addOns.length > 0 ? (
               <div className={blockBeforeRegularAddons ? "mt-6" : "mt-4"}>
                 <fieldset className="space-y-2">
@@ -538,13 +641,13 @@ export function MenuCustomizeModal() {
               </fieldset>
             ) : null}
 
-            {removals.length > 0 ? (
+            {visibleRemovals.length > 0 ? (
               <div className="mt-6">
                 <fieldset className="space-y-2">
                   <legend className="mb-2 w-full px-1 text-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--cj-orange)]">
                     Remove
                   </legend>
-                  {removals.map((r) => {
+                  {visibleRemovals.map((r) => {
                     const rid = `${headingId}-rem-${r.id}`;
                     return (
                       <label
