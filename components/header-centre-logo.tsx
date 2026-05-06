@@ -18,11 +18,11 @@ export function HeaderCentreLogo({ className = "" }: HeaderCentreLogoProps) {
   return (
     <Link
       href="/"
-      className={`flex min-h-[3rem] min-w-0 max-w-full items-center justify-center py-1 ${className}`.trim()}
+      className={`flex min-h-[3.75rem] min-w-0 max-w-full items-center justify-center py-1 ${className}`.trim()}
       aria-label={`${cafe.name} home`}
     >
       <motion.div
-        className="flex min-h-[3rem] w-full max-w-full items-center justify-center lg:min-h-[3.5rem]"
+        className="flex min-h-[3.75rem] w-full max-w-full items-center justify-center lg:min-h-[4.5rem]"
         initial={reduce ? false : { opacity: 0, y: -6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduce ? 0.01 : 0.55, ease: [0.22, 1, 0.36, 1] }}
@@ -35,7 +35,7 @@ export function HeaderCentreLogo({ className = "" }: HeaderCentreLogoProps) {
           height={150}
           decoding="async"
           fetchPriority="high"
-          className="mx-auto h-[2.55rem] w-auto max-w-full object-contain object-center sm:h-[2.9rem] md:h-[3.15rem] lg:h-[3.85rem]"
+          className="mx-auto h-[3.55rem] w-auto max-w-full object-contain object-center sm:h-[3.7rem] md:h-[3.9rem] lg:h-[4.5rem]"
         />
       </motion.div>
     </Link>

@@ -116,16 +116,6 @@ export default function Home() {
       </section>
 
       <SimpleSiteContact />
-
-      <section className="border-t border-[rgba(255,122,0,0.08)] px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-3xl rounded-[2rem] border border-[rgba(255,122,0,0.14)] bg-[rgba(248,245,239,0.03)] px-6 py-10 text-center shadow-inner shadow-black/20 sm:py-14">
-          <SectionHeading
-            align="center"
-            kicker="Coming soon"
-            title="Fresh photos from the counter are on the way."
-          />
-        </div>
-      </section>
     </main>
   );
 }
