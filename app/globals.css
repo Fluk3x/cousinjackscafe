@@ -173,44 +173,6 @@ dialog.cj-roll-dialog {
   color: rgba(255, 243, 214, 0.92);
 }
 
-/* Wispy splash steam (mock reference) */
-.cj-css-steam {
-  width: 15px;
-  height: 86px;
-  border-radius: 999px;
-  border-left: 3px solid rgba(255, 196, 120, 0.42);
-  filter: blur(1.05px);
-  opacity: 0.85;
-  animation: cj-steam-rise 2.35s ease-in-out infinite;
-  transform-origin: 50% 100%;
-}
-
-.cj-css-steam--two {
-  animation-delay: 0.32s;
-  opacity: 0.74;
-}
-
-.cj-css-steam--three {
-  animation-delay: 0.64s;
-  opacity: 0.68;
-}
-
-@keyframes cj-steam-rise {
-  0% {
-    transform: translateY(18px) scaleY(0.55);
-    opacity: 0;
-  }
-
-  32% {
-    opacity: 0.78;
-  }
-
-  100% {
-    transform: translateY(-34px) scaleY(1.05);
-    opacity: 0;
-  }
-}
-
 /* Popular pick photo tile — solid black so PNGs with transparency match punchier assets (e.g. latte on black). */
 .pick-photo-shell {
   position: relative;
@@ -306,11 +268,6 @@ body {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .cj-css-steam {
-    animation: none !important;
-    opacity: 0 !important;
   }
 
   .primary-button:hover,

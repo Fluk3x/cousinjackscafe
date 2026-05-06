@@ -54,11 +54,7 @@ export function IntroSplash() {
           <div aria-hidden="true" className="cj-texture-overlay pointer-events-none absolute inset-0 opacity-25" />
 
           <motion.div className="relative z-[2] mx-auto flex w-full max-w-lg flex-col items-center px-6 pt-28 pb-20 sm:pt-32">
-            <div className="relative flex justify-center [&_.cj-css-steam]:pointer-events-none">
-              <motion.div aria-hidden className="cj-css-steam cj-css-steam--one absolute -top-28 left-[42%] z-[3]" />
-              <motion.div aria-hidden className="cj-css-steam cj-css-steam--two absolute -top-[6.85rem] left-1/2 z-[3] -translate-x-1/2" />
-              <motion.div aria-hidden className="cj-css-steam cj-css-steam--three absolute -top-[6.85rem] left-[58%] z-[3]" />
-
+            <div className="relative flex justify-center">
               <motion.img
                 src="/cousin_jacks_logo.png"
                 alt=""
