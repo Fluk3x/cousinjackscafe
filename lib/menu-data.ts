@@ -4,6 +4,9 @@
  * Every board row has stable `id` for customise + basket wiring.
  */
 
+/** Hero chips (`/?category=&`) use `#${…}` — scroll lands at category pills below the Full menu headline. */
+export const MENU_CATEGORY_ANCHOR_ID = "menu-categories";
+
 export type RollVariantChoice = {
   id: string;
   label: string;
@@ -23,8 +26,6 @@ export type RollAddOn = {
 export type RemovalChoice = {
   id: string;
   name: string;
-  /** When set, "Remove" only shows this row for these primary variant ids */
-  primaryVariantIds?: readonly string[];
 };
 
 export type ItemCustomizationConfig = {
@@ -34,7 +35,7 @@ export type ItemCustomizationConfig = {
   /** Second radio group at the same base price (e.g. burger sauce amount) */
   secondarySectionTitle?: string;
   secondaryChoices?: RollVariantChoice[];
-  /** Sandwich toast picker - rendered last in the customise modal below Remove (optional). */
+  /** Sandwich toast picker (optional). */
   toastSectionTitle?: string;
   toastChoices?: RollVariantChoice[];
   /** Sauces / spreads for items where flavour is not the primary picker (sandwiches, light breakfast) */
@@ -53,7 +54,6 @@ export type ItemCustomizationConfig = {
   /** Fallback primary id when fillings do not match any named combo. */
   primaryCustomFillVariantId?: string;
   addOns?: RollAddOn[];
-  removals?: RemovalChoice[];
 };
 
 export type BoardMenuItem = {
@@ -187,6 +187,19 @@ const rm: Record<string, RemovalChoice> = {
   schnitzel: { id: "no-schnitzel", name: "No Schnitzel" },
 };
 
+/** Hidden primary for burgers / sandwiches / halloumi — ingredients sync as default-on bundles. */
+export const STANDARD_BUILD_VARIANT_ID = "std-build";
+
+/** Former “Remove” rows → default-on Ingredients (unchecked = hold / omit, `$0`). */
+function includedIngredientsFromRemovals(cores: RemovalChoice[], variantIds: readonly string[]): RollAddOn[] {
+  return cores.map((r) => ({
+    id: `ing-${r.id}`,
+    name: r.name.replace(/^No\s+/i, "").trim(),
+    priceCents: 0,
+    excludeForVariantIds: [...variantIds],
+  }));
+}
+
 function burgerSides(bacon: "Bacon" | "Extra Bacon"): RollAddOn[] {
   return [
     { id: "beef-patty", name: "Extra Beef Patty", priceCents: 500 },
@@ -249,6 +262,9 @@ const baconEggVariantsWrap: RollVariantChoice[] = [
     priceCents: 1890,
   },
 ];
+
+const BACON_EGG_ROLL_ING_VARIANT_IDS = baconEggVariantsRoll.map((v) => v.id);
+const BACON_EGG_WRAP_ING_VARIANT_IDS = baconEggVariantsWrap.map((v) => v.id);
 
 const toastieVariants: RollVariantChoice[] = [
   { id: "cheese", label: "Cheese Toastie", price: "$8.00", priceCents: 800 },
@@ -379,7 +395,7 @@ function burgerCustom(
   baseCents: number,
   priceLabel: string,
   listedSauce: BurgerSauceListed,
-  removals: RemovalChoice[],
+  coreIngredients: RemovalChoice[],
   burgerExtras: RollAddOn[],
 ): ItemCustomizationConfig {
   const sauceAsIncluded = burgerSaucePrimaries(baseCents, priceLabel, listedSauce).map((c) => ({
@@ -388,13 +404,14 @@ function burgerCustom(
     priceCents: 0,
   }));
   return {
+    primaryChoices: [{ id: STANDARD_BUILD_VARIANT_ID, label: "As Listed", price: priceLabel, priceCents: baseCents }],
+    ingredientAddOns: includedIngredientsFromRemovals(coreIngredients, [STANDARD_BUILD_VARIANT_ID]),
     secondarySectionTitle: "How Much Sauce",
     secondaryChoices: burgerSauceAmount,
     sauceSectionTitle: "Sauce",
     sauceChoices: sauceAsIncluded,
     comboAddOns: [CHIPS_COMBO_ADDON],
     addOns: burgerExtras,
-    removals,
   };
 }
 
@@ -405,18 +422,27 @@ const coffeeStyle = (sizes: RollVariantChoice[]): ItemCustomizationConfig => ({
   addOns: COFFEE_DRINK_ADDONS,
 });
 
-const sandwichCustom = (addOns: RollAddOn[], removals: RemovalChoice[], sauceChoices: RollVariantChoice[]): ItemCustomizationConfig => ({
-  toastSectionTitle: "Toast Level",
-  toastChoices: [
-    { id: "toast-std", label: "Standard Toast", price: "$13.50", priceCents: 1350 },
-    { id: "toast-crisp", label: "Extra Crispy Toast", price: "$13.50", priceCents: 1350 },
-  ],
-  sauceSectionTitle: "Sauce",
-  sauceChoices,
-  comboAddOns: [CHIPS_COMBO_ADDON],
-  addOns,
-  removals,
-});
+function sandwichCustom(
+  baseCents: number,
+  priceLabel: string,
+  addOns: RollAddOn[],
+  coreIngredients: RemovalChoice[],
+  sauceChoices: RollVariantChoice[],
+): ItemCustomizationConfig {
+  return {
+    primaryChoices: [{ id: STANDARD_BUILD_VARIANT_ID, label: "As Listed", price: priceLabel, priceCents: baseCents }],
+    toastSectionTitle: "Toast Level",
+    toastChoices: [
+      { id: "toast-std", label: "Standard Toast", price: priceLabel, priceCents: baseCents },
+      { id: "toast-crisp", label: "Extra Crispy Toast", price: priceLabel, priceCents: baseCents },
+    ],
+    sauceSectionTitle: "Sauce",
+    sauceChoices,
+    comboAddOns: [CHIPS_COMBO_ADDON],
+    ingredientAddOns: includedIngredientsFromRemovals(coreIngredients, [STANDARD_BUILD_VARIANT_ID]),
+    addOns,
+  };
+}
 
 export const menuCategories: BoardMenuCategory[] = [
   {
@@ -432,10 +458,10 @@ export const menuCategories: BoardMenuCategory[] = [
         customization: {
           primarySectionTitle: "Choose Version",
           primaryChoices: baconEggVariantsRoll,
+          ingredientAddOns: includedIngredientsFromRemovals([rm.bacon, rm.eggFried], BACON_EGG_ROLL_ING_VARIANT_IDS),
           addOns: baconEggStyleAddOns,
           sauceSectionTitle: "Sauce",
           sauceChoices: breakfastSauceBbqDefault,
-          removals: [rm.bacon, rm.eggFried],
         },
       },
       {
@@ -446,10 +472,13 @@ export const menuCategories: BoardMenuCategory[] = [
         customization: {
           primarySectionTitle: "Choose Version",
           primaryChoices: baconEggVariantsWrap,
+          ingredientAddOns: includedIngredientsFromRemovals(
+            [rm.bacon, rm.scrambledEgg, rm.cheese],
+            BACON_EGG_WRAP_ING_VARIANT_IDS,
+          ),
           addOns: baconEggStyleAddOns,
           sauceSectionTitle: "Sauce",
           sauceChoices: breakfastSauceBbqDefault,
-          removals: [rm.bacon, rm.scrambledEgg, rm.cheese],
         },
       },
       {
@@ -459,15 +488,19 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$12.00",
         basePriceCents: 1200,
         customization: {
+          primaryChoices: [{ id: STANDARD_BUILD_VARIANT_ID, label: "As Listed", price: "$12.00", priceCents: 1200 }],
+          ingredientAddOns: includedIngredientsFromRemovals(
+            [rm.halloumi, rm.eggFried, rm.hashBrown, rm.spinach],
+            [STANDARD_BUILD_VARIANT_ID],
+          ),
           addOns: HALLUMI_WRAP_ADDONS,
           sauceSectionTitle: "Sauce",
           sauceChoices: breakfastSauceBbqDefault,
-          removals: [rm.halloumi, rm.eggFried, rm.hashBrown, rm.spinach],
         },
       },
       {
         id: "toastie",
-        name: "Toastie",
+        name: "Toasties",
         description: "Cheese; Cheese & Tomato; Ham & Cheese; Ham, Cheese & Tomato; Avocado.",
         price: "From $8.00",
         basePriceCents: 800,
@@ -478,6 +511,11 @@ export const menuCategories: BoardMenuCategory[] = [
           primaryCustomFillVariantId: "toastie-custom",
           ingredientAddOns: TOASTIE_FILL_ADDONS,
           addOns: TOASTIE_EXTRA_ADDONS,
+          toastSectionTitle: "Toast Level",
+          toastChoices: [
+            { id: "toast-std", label: "Standard Toast", price: "", priceCents: 0 },
+            { id: "toast-crisp", label: "Extra Crispy Toast", price: "", priceCents: 0 },
+          ],
           sauceSectionTitle: "Sauce",
           sauceChoices: toastieSauceChoices,
         },
@@ -495,11 +533,7 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$13.50",
         popular: true,
         basePriceCents: 1350,
-        customization: sandwichCustom(
-          SIDES_GRILLED_CHICKEN_SW,
-          [rm.chicken, rm.avocado, rm.lettuce, rm.cheese],
-          sandwichSauceMayoDefault,
-        ),
+        customization: sandwichCustom(1350, "$13.50", SIDES_GRILLED_CHICKEN_SW, [rm.chicken, rm.avocado, rm.lettuce, rm.cheese], sandwichSauceMayoDefault),
       },
       {
         id: "reuben-sandwich",
@@ -508,6 +542,8 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
+          1350,
+          "$13.50",
           SIDES_REUBEN_SW,
           [rm.cornedBeef, rm.cheese, rm.sauerkraut, rm.pickles],
           sandwichSauceThousandIslandDefault,
@@ -520,6 +556,8 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
+          1350,
+          "$13.50",
           SIDES_MORTADELLA_SW,
           [rm.mortadella, rm.mozzarella, rm.sundriedTomato],
           sandwichSaucePestoDefault,
@@ -532,6 +570,8 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
+          1350,
+          "$13.50",
           SIDES_MEDITERRANEAN_SW,
           [rm.zucchini, rm.capsicum, rm.eggplant, rm.feta, rm.rocket],
           sandwichSaucePestoDefault,
@@ -543,11 +583,7 @@ export const menuCategories: BoardMenuCategory[] = [
         description: "Bacon, Lettuce, Avocado, Tomato & Mayo",
         price: "$13.50",
         basePriceCents: 1350,
-        customization: sandwichCustom(
-          SIDES_BLAT_SW,
-          [rm.bacon, rm.lettuce, rm.avocado, rm.tomato],
-          sandwichSauceMayoDefault,
-        ),
+        customization: sandwichCustom(1350, "$13.50", SIDES_BLAT_SW, [rm.bacon, rm.lettuce, rm.avocado, rm.tomato], sandwichSauceMayoDefault),
       },
       {
         id: "chicken-bacon-sandwich",
@@ -556,6 +592,8 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
+          1350,
+          "$13.50",
           SIDES_CHICKEN_BACON_SW,
           [rm.chicken, rm.bacon, rm.lettuce, rm.tomato],
           sandwichSauceChickenBaconDefault,
@@ -568,6 +606,8 @@ export const menuCategories: BoardMenuCategory[] = [
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
+          1350,
+          "$13.50",
           SIDES_SCHNITZEL_SW,
           [rm.schnitzel, rm.lettuce, rm.tomato],
           sandwichSauceMayoDefault,
@@ -585,12 +625,7 @@ export const menuCategories: BoardMenuCategory[] = [
         description: "Beef Patty, Double Cheese, Tomato, Pickles With Special Sauce",
         price: "$12.90",
         basePriceCents: 1290,
-        customization: burgerCustom(1290, "$12.90", "special", [
-          rm.beefPatty,
-          rm.cheese,
-          rm.tomato,
-          rm.pickles,
-        ], burgerSides("Bacon")),
+        customization: burgerCustom(1290, "$12.90", "special", [rm.beefPatty, rm.cheese, rm.tomato, rm.pickles], burgerSides("Bacon")),
       },
       {
         id: "cj-special-burger",

@@ -6,7 +6,7 @@ import { menuCategories } from "@/lib/menu-data";
 
 export const metadata: Metadata = {
   title: "Menu",
-  description: `${cafe.name}: breakfast rolls, toasted sandwiches, burgers, speciality coffee and cold drinks in Guildford, NSW.`,
+  description: `${cafe.name}: breakfast rolls, toasties, burgers, speciality coffee and cold drinks in Guildford, NSW.`,
 };
 
 export default function MenuPage() {
@@ -16,7 +16,7 @@ export default function MenuPage() {
         <div className="section-panel">
           <SectionHeading
             kicker="Menu"
-            title="Breakfast, Sandwiches, Burgers, Coffee And Drinks In Guildford."
+            title="Breakfast, Toasties, Burgers, Coffee And Drinks In Guildford."
             copy="Same board as home: browse by category and order online when you are in a hurry."
           />
           <MenuBoard categories={menuCategories} />

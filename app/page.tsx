@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { MapPin, Phone } from "lucide-react";
 import { AnimatedHero } from "@/components/animated-hero";
 import { SimpleSiteContact } from "@/components/simple-site-contact";
@@ -29,13 +30,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="full-menu" className="px-4 py-20 sm:px-6 lg:px-8">
+      <section
+        id="full-menu"
+        className="scroll-mt-[4.75rem] px-4 py-20 sm:scroll-mt-[5rem] sm:px-6 lg:px-8"
+      >
         <div className="mx-auto max-w-7xl">
           <div className="section-panel">
             <SectionHeading
               align="center"
               kicker="Full menu"
-              title="Breakfast, Sandwiches, Burgers, Coffee And Drinks, All In One Place."
+              title="Breakfast, Toasties, Burgers, Coffee And Drinks, All In One Place."
             />
             <MenuBoard categories={menuCategories} className="mt-7" />
           </div>
@@ -53,7 +57,7 @@ export default function Home() {
             <SectionHeading
               align="center"
               title="Find us in Guildford"
-              copy="Drop in for coffee, breakfast, sandwiches and burgers. Good food, strong coffee and friendly local service."
+              copy="Drop in for coffee, breakfast, toasties and burgers. Good food, strong coffee and friendly local service."
             />
             <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
               <a
@@ -111,12 +115,12 @@ export default function Home() {
             >
               Order online
             </a>
-            <a
+            <Link
               href="/#full-menu"
               className="inline-flex justify-center rounded-full border border-[rgba(255,243,214,0.25)] px-8 py-4 text-sm font-bold text-[var(--cj-cream)] transition hover:border-[var(--cj-orange)]/50"
             >
               View menu
-            </a>
+            </Link>
           </div>
         </div>
       </section>

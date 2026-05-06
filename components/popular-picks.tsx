@@ -19,7 +19,7 @@ export function PopularPicks({ items }: { items: PopularPickHighlight[] }) {
         const blurb = highlight.description ?? menuItem.description;
         const canCustomize = !!menuItem.customization;
         const inner = (
-          <>
+          <div className="flex h-full w-full flex-col items-center">
             <div className="relative w-full overflow-hidden rounded-[1.05rem]">
               <span className="pointer-events-none absolute left-1/2 top-2.5 z-[2] inline-flex -translate-x-1/2 items-center gap-1 rounded-full border border-[rgba(246,182,74,0.35)] bg-[rgba(12,10,9,0.78)] px-2.5 py-1 backdrop-blur-sm">
                 <Sparkles aria-hidden className="size-3 shrink-0 text-[var(--cj-gold)]" />
@@ -30,16 +30,18 @@ export function PopularPicks({ items }: { items: PopularPickHighlight[] }) {
             <div className="mt-4 text-center">
               <h3 className="font-display w-full text-balance text-[1.05rem] font-semibold leading-snug text-[var(--cj-cream)]">{menuItem.name}</h3>
             </div>
-            <p className={`w-full text-balance text-sm leading-relaxed text-[var(--cj-cream)]/72 mt-3 min-h-[2.85rem]`}>{blurb}</p>
-            <p className="font-display mt-3 text-xl font-semibold text-[var(--cj-orange)]">{menuItem.price}</p>
-            {canCustomize ? (
-              <p className="mt-2 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[var(--cj-cream)]/45">Tap to customise</p>
-            ) : null}
-          </>
+            <p className="mt-3 min-h-[2.85rem] w-full flex-1 text-balance text-sm leading-relaxed text-[var(--cj-cream)]/72">{blurb}</p>
+            <div className="mt-auto flex w-full flex-col items-center gap-1.5 pt-4">
+              <p className="font-display text-xl font-semibold text-[var(--cj-orange)]">{menuItem.price}</p>
+              {canCustomize ? (
+                <p className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[var(--cj-cream)]/45">Tap to customise</p>
+              ) : null}
+            </div>
+          </div>
         );
 
         const cls =
-          "flex w-full flex-col items-center rounded-[1.45rem] border border-[rgba(255,122,0,0.24)] bg-[rgba(8,6,5,0.82)] p-4 text-center shadow-[0_26px_64px_rgba(0,0,0,0.38)] backdrop-blur-md transition-[transform,border-color] duration-200 hover:-translate-y-1 hover:border-[rgba(255,122,0,0.52)] md:p-[1.1rem] outline-none ring-[var(--cj-orange)] focus-visible:-translate-y-1 focus-visible:ring-2";
+          "flex h-full min-h-[22rem] w-full flex-col items-stretch rounded-[1.45rem] border border-[rgba(255,122,0,0.24)] bg-[rgba(8,6,5,0.82)] p-4 text-center shadow-[0_26px_64px_rgba(0,0,0,0.38)] backdrop-blur-md transition-[transform,border-color] duration-200 hover:-translate-y-1 hover:border-[rgba(255,122,0,0.52)] md:p-[1.1rem] outline-none ring-[var(--cj-orange)] focus-visible:-translate-y-1 focus-visible:ring-2";
 
         return canCustomize ? (
           <motion.button

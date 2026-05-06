@@ -26,8 +26,46 @@ dialog.cj-roll-dialog {
   position: fixed;
   top: 50%;
   left: 50%;
+  right: auto;
+  bottom: auto;
   translate: -50% -50%;
   margin: 0;
+  box-sizing: border-box;
+}
+
+/* Thin, low-contrast scrollbar — content still scrolls / swipes on touch */
+.cj-customize-scroll {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 122, 0, 0.22) transparent;
+}
+.cj-customize-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.cj-customize-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cj-customize-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 122, 0, 0.22);
+  border-radius: 999px;
+}
+.cj-customize-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 122, 0, 0.38);
+}
+
+/* Menu category pills: hide scrollbar, keep swipe / trackpad scroll */
+.cj-menu-category-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.cj-menu-category-scroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+/* Older WebKit: horizontal bar sometimes still paints without both dimensions zeroed */
+.cj-menu-category-scroll::-webkit-scrollbar:horizontal {
+  height: 0;
 }
 .cj-texture-overlay {
   background-image:

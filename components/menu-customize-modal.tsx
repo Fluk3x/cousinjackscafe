@@ -6,17 +6,11 @@ import { useOrderCart } from "@/components/order-context";
 import { cafe } from "@/lib/content";
 import {
   audFromCents,
+  STANDARD_BUILD_VARIANT_ID,
   type BoardMenuItem,
-  type RemovalChoice,
   type RollAddOn,
   type RollVariantChoice,
 } from "@/lib/menu-data";
-
-function removalShownForPrimaryVariant(r: RemovalChoice, variantId: string): boolean {
-  const ids = r.primaryVariantIds;
-  if (!ids?.length) return true;
-  return ids.includes(variantId);
-}
 
 const NO_COMBO_ADDONS: RollAddOn[] = [];
 
@@ -105,7 +99,6 @@ function buildLineDetail(
   regularAddOns: RollAddOn[],
   addOnIds: Set<string>,
   variantId: string,
-  removalNames: string[],
   toastVariant: RollVariantChoice | undefined,
   showToastLine: boolean,
   instructions: string,
@@ -124,13 +117,13 @@ function buildLineDetail(
     const bundled = !!(a.excludeForVariantIds?.includes(variantId));
     const selected = addOnIds.has(a.id);
     if (bundled) {
-      if (selected) parts.push(`${a.name}`);
-      else parts.push(`${a.name} credit -${audFromCents(a.priceCents)}`);
+      if (selected) parts.push(a.name);
+      else if (a.priceCents > 0) parts.push(`${a.name} credit -${audFromCents(a.priceCents)}`);
+      else parts.push(`Without ${a.name}`);
     } else if (selected) {
       parts.push(`${a.name} +${audFromCents(a.priceCents)}`);
     }
   }
-  for (const n of removalNames) parts.push(n);
   if (showToastLine && toastVariant) parts.push(toastVariant.label);
   if (instructions.trim()) parts.push(`Note: ${instructions.trim()}`);
   return parts.join(" · ");
@@ -141,6 +134,12 @@ function addOnContributionCents(a: RollAddOn, variantId: string, selected: boole
   const bundled = a.excludeForVariantIds?.includes(variantId) ?? false;
   if (bundled) return selected ? 0 : -a.priceCents;
   return selected ? a.priceCents : 0;
+}
+
+function sumAddOnRowsCents(rows: RollAddOn[], variantId: string, ids: Set<string>): number {
+  let n = 0;
+  for (const a of rows) n += addOnContributionCents(a, variantId, ids.has(a.id));
+  return n;
 }
 
 export function MenuCustomizeModal() {
@@ -159,7 +158,6 @@ export function MenuCustomizeModal() {
   const milkOptions = custom?.milkOptions ?? [];
   const ingredientAddOns = custom?.ingredientAddOns ?? NO_COMBO_ADDONS;
   const addOns = custom?.addOns ?? [];
-  const removals = custom?.removals ?? [];
   const allAddOnRows = useMemo<RollAddOn[]>(
     () =>
       !custom
@@ -179,9 +177,10 @@ export function MenuCustomizeModal() {
   const [selectedMilk, setSelectedMilk] = useState(0);
   const [instructions, setInstructions] = useState("");
   const [addOnIds, setAddOnIds] = useState<Set<string>>(() => new Set());
-  const [removalIds, setRemovalIds] = useState<Set<string>>(() => new Set());
 
   const open = item !== null && !!custom;
+
+  const [mealHold, setMealHold] = useState<{ snapshotIds: Set<string> } | null>(null);
 
   /** Reset picker state synchronously before paint so variant add-on sync sees the correct primary. */
   useLayoutEffect(() => {
@@ -192,10 +191,10 @@ export function MenuCustomizeModal() {
     setSelectedSauce(0);
     setSelectedMilk(0);
     setInstructions("");
-    setRemovalIds(new Set());
     setAddOnIds(new Set());
+    setMealHold(null);
     variantIdPrevRef.current = undefined;
-  }, [item?.id, custom]);
+  }, [item?.id, customizeOpenSeq, custom]);
 
   useEffect(() => {
     const el = dialogRef.current;
@@ -225,11 +224,6 @@ export function MenuCustomizeModal() {
   const showSauceUi = sauceChoices.length > 0;
   const toastPick = toastChoices[selectedToast];
   const showToastUi = toastChoices.length > 0;
-
-  const visibleRemovals = useMemo(
-    () => removals.filter((r) => removalShownForPrimaryVariant(r, variantId)),
-    [removals, variantId],
-  );
 
   const primaryBundlesAddOnPricing =
     primaryChoices.length > 1 &&
@@ -290,22 +284,6 @@ export function MenuCustomizeModal() {
     });
   }, [open, item, variantId, allAddOnRows, custom?.primaryCustomFillVariantId]);
 
-  useLayoutEffect(() => {
-    if (!open || removals.length === 0) return;
-    setRemovalIds((prev) => {
-      let changed = false;
-      const next = new Set(prev);
-      for (const id of prev) {
-        const r = removals.find((x) => x.id === id);
-        if (r && !removalShownForPrimaryVariant(r, variantId)) {
-          next.delete(id);
-          changed = true;
-        }
-      }
-      return changed ? next : prev;
-    });
-  }, [open, removals, variantId]);
-
   useEffect(() => {
     const el = dialogRef.current;
     if (!el) return;
@@ -340,19 +318,9 @@ export function MenuCustomizeModal() {
     addOnsTotalCents;
 
   const milkLabelSel = milkOptions.length > 0 ? milkOptions[selectedMilk]?.label : undefined;
-  const removalNames = visibleRemovals.filter((r) => removalIds.has(r.id)).map((r) => r.name);
 
   const toggleAddOn = (id: string) => {
     setAddOnIds((prev) => {
-      const n = new Set(prev);
-      if (n.has(id)) n.delete(id);
-      else n.add(id);
-      return n;
-    });
-  };
-
-  const toggleRemoval = (id: string) => {
-    setRemovalIds((prev) => {
       const n = new Set(prev);
       if (n.has(id)) n.delete(id);
       else n.add(id);
@@ -380,15 +348,27 @@ export function MenuCustomizeModal() {
         <span
           className={`shrink-0 pt-0.5 font-display text-sm text-[var(--cj-orange)] ${selected ? "" : "opacity-[0.72]"}`}
         >
-          +{audFromCents(a.priceCents)}
+          {a.priceCents > 0 ? `+${audFromCents(a.priceCents)}` : ""}
         </span>
       </label>
     );
   };
 
-  const handleAddBasket = () => {
+  const commitCustomizeToCart = (checkoutAddOnIds: Set<string>) => {
     if (!item) return;
-    const showPrimaryPriceLine = primaryChoices.length > 0;
+
+    const addOnsCheckoutCents = sumAddOnRowsCents(allAddOnRows, variantId, checkoutAddOnIds);
+    const checkoutLineTotalCents =
+      baseCoreCents +
+      toastDeltaCents +
+      secondaryExtraCents +
+      sauceExtraCents +
+      milkExtraCents +
+      addOnsCheckoutCents;
+
+    const showPrimaryPriceLine =
+      primaryChoices.length > 1 ||
+      (primaryChoices.length === 1 && primaryChoices[0]?.id !== STANDARD_BUILD_VARIANT_ID);
     const primaryForDetail = variant ?? primaryChoices[0];
     const showSecondaryLine = secondaryChoices.length > 0;
     const secondaryForDetail = secondaryPick ?? secondaryChoices[0];
@@ -407,9 +387,8 @@ export function MenuCustomizeModal() {
       comboAddOns,
       ingredientAddOns,
       addOns,
-      addOnIds,
+      checkoutAddOnIds,
       variantId,
-      removalNames,
       toastDetailPick,
       showToastDetail,
       instructions,
@@ -418,9 +397,31 @@ export function MenuCustomizeModal() {
       label: item.name,
       detail: detail || "As listed",
       quantity: 1,
-      lineTotalCents: totalCents,
+      lineTotalCents: checkoutLineTotalCents,
     });
   };
+
+  const handleAddBasket = () => {
+    if (!item) return;
+    const comboOffer = comboAddOns.length > 0;
+    const comboAlreadyOn = comboAddOns.some((a) => addOnIds.has(a.id));
+    if (comboOffer && !comboAlreadyOn) {
+      setMealHold({ snapshotIds: new Set(addOnIds) });
+      return;
+    }
+    commitCustomizeToCart(addOnIds);
+  };
+
+  const resolveMealHold = (includeCombo: boolean) => {
+    if (!mealHold) return;
+    const checkoutAddOnIds = new Set(mealHold.snapshotIds);
+    if (includeCombo) comboAddOns.forEach((a) => checkoutAddOnIds.add(a.id));
+    setMealHold(null);
+    commitCustomizeToCart(checkoutAddOnIds);
+  };
+
+  const mealPromptHeadingId = `${headingId}-meal-prompt-title`;
+  const comboExtraCentsPreview = comboAddOns.filter((a) => a.priceCents > 0).reduce((s, a) => s + a.priceCents, 0);
 
   const primaryTitle = custom?.primarySectionTitle ?? "Choose Options";
   const secondaryTitle = custom?.secondarySectionTitle ?? "Options";
@@ -429,9 +430,9 @@ export function MenuCustomizeModal() {
   const blockBeforeMilk = showPrimaryUi;
   const blockBeforeCombo = blockBeforeMilk || milkOptions.length > 0;
   const showComboUi = comboAddOns.length > 0;
-  const blockBeforeIngredientAddons = blockBeforeCombo || showComboUi;
+  const blockBeforeIngredients = blockBeforeCombo || showComboUi;
   const showIngredientAddonsUi = ingredientAddOns.length > 0;
-  const blockBeforeRegularAddons = blockBeforeIngredientAddons || showIngredientAddonsUi;
+  const blockBeforeRegularAddons = blockBeforeIngredients || showIngredientAddonsUi;
   const blockBeforeSauceAfterExtras = blockBeforeRegularAddons || addOns.length > 0;
   const blockBeforeSecondaryAfterSauce = blockBeforeSauceAfterExtras || showSauceUi;
 
@@ -452,14 +453,77 @@ export function MenuCustomizeModal() {
     <dialog
       ref={dialogRef}
       aria-labelledby={open ? headingId : undefined}
-      className="cj-roll-dialog w-[min(100vw-1.5rem,26rem)] max-h-[min(92vh,40rem)] overflow-hidden rounded-[1.35rem] border border-[rgba(255,122,0,0.35)] bg-[var(--cj-charcoal)] p-0 text-[var(--cj-cream)] shadow-2xl shadow-black/50"
+      className="cj-roll-dialog mx-auto w-[min(100vw-1.5rem,26rem)] max-h-[min(92vh,40rem)] max-w-[calc(100vw-1.5rem)] overflow-hidden rounded-[1.35rem] border border-[rgba(255,122,0,0.35)] bg-[var(--cj-charcoal)] p-0 text-[var(--cj-cream)] shadow-2xl shadow-black/50"
     >
       {open && item && custom ? (
-        <div className="relative flex max-h-[inherit] flex-col">
+        <div className="relative flex min-h-0 max-h-[inherit] flex-col">
+          {mealHold && comboAddOns.length > 0 ? (
+            <div
+              role="presentation"
+              className="absolute inset-0 z-30 flex items-end justify-center bg-black/75 p-3 backdrop-blur-sm sm:items-center sm:p-6"
+              onClick={(e) => {
+                if (e.target === e.currentTarget) resolveMealHold(false);
+              }}
+            >
+              <div
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={mealPromptHeadingId}
+                className="w-full max-w-[22rem] rounded-[1.25rem] border border-[rgba(255,122,0,0.4)] bg-[linear-gradient(160deg,rgba(42,27,20,0.98),rgba(8,6,5,0.98))] p-6 py-7 text-center shadow-[0_28px_64px_rgba(0,0,0,0.55)]"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <p className="text-[0.65rem] font-bold uppercase tracking-[0.28em] text-[var(--cj-orange)]">Meal upgrade</p>
+                <h3 id={mealPromptHeadingId} className="font-display mt-2 text-xl font-semibold tracking-tight text-[var(--cj-cream)]">
+                  Make it a meal?
+                </h3>
+                <div className="mt-4 space-y-2 rounded-xl border border-[rgba(255,122,0,0.15)] bg-[rgba(0,0,0,0.35)] px-4 py-3 text-left">
+                  {comboAddOns.map((a) => (
+                    <div key={a.id} className="flex justify-between gap-3 text-sm">
+                      <span className="min-w-0 font-semibold text-[var(--cj-cream)]/92">{a.name}</span>
+                      <span className="shrink-0 font-display text-[var(--cj-orange)]">
+                        {a.priceCents > 0 ? audFromCents(a.priceCents) : ""}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--cj-cream)]/72">
+                  {comboExtraCentsPreview > 0 ? (
+                    <>
+                      Combo adds{" "}
+                      <span className="font-display font-semibold text-[var(--cj-gold)]">{audFromCents(comboExtraCentsPreview)}</span>{" "}
+                      all up.
+                    </>
+                  ) : (
+                    <>Includes combo sides at listed prices.</>
+                  )}
+                </p>
+                <p className="mt-2 text-xs text-[var(--cj-cream)]/55">
+                  Continue without keeps your burger only — still added to basket.
+                </p>
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:justify-center sm:gap-3">
+                  <button
+                    type="button"
+                    onClick={() => resolveMealHold(false)}
+                    className="min-h-[2.85rem] w-full shrink-0 rounded-full border border-[rgba(255,243,214,0.22)] px-4 text-sm font-bold text-[var(--cj-cream)] transition hover:border-[var(--cj-orange)]/45 sm:flex-1"
+                  >
+                    No thanks — add burger only
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => resolveMealHold(true)}
+                    className="min-h-[2.85rem] w-full shrink-0 rounded-full bg-[var(--cj-orange)] px-4 text-sm font-bold text-[var(--cj-charcoal)] shadow-md transition hover:brightness-110 sm:flex-1"
+                  >
+                    Yes — make it a meal
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
+
           <button
             type="button"
             onClick={close}
-            className="absolute right-3 top-3 z-10 grid size-9 place-items-center rounded-xl border border-[rgba(255,243,214,0.12)] text-[var(--cj-cream)] transition hover:border-[var(--cj-orange)]/40 hover:text-[var(--cj-gold)]"
+            className="absolute right-3 top-3 z-40 grid size-9 place-items-center rounded-xl border border-[rgba(255,243,214,0.12)] text-[var(--cj-cream)] transition hover:border-[var(--cj-orange)]/40 hover:text-[var(--cj-gold)]"
             aria-label="Close"
           >
             <X className="size-4" aria-hidden />
@@ -478,7 +542,7 @@ export function MenuCustomizeModal() {
             </p>
           </div>
 
-          <div ref={scrollAreaRef} className="overflow-y-auto px-5 py-4 text-left">
+          <div ref={scrollAreaRef} className="cj-customize-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-4 text-left">
             {showPrimaryUi ? (
               <fieldset className="mt-4 space-y-2">
                 <legend className="mb-3 w-full px-1 text-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--cj-orange)]">
@@ -550,7 +614,7 @@ export function MenuCustomizeModal() {
               <div className={blockBeforeCombo ? "mt-6" : "mt-4"}>
                 <fieldset className="space-y-2">
                   <legend className="mb-2 w-full px-1 text-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--cj-orange)]">
-                    Combo
+                    Make it a meal
                   </legend>
                   {comboAddOns.map((a) => renderAddonCheckbox(a, "combo"))}
                 </fieldset>
@@ -558,7 +622,7 @@ export function MenuCustomizeModal() {
             ) : null}
 
             {showIngredientAddonsUi ? (
-              <div className={blockBeforeIngredientAddons ? "mt-6" : "mt-4"}>
+              <div className={blockBeforeIngredients ? "mt-6" : "mt-4"}>
                 <fieldset className="space-y-2">
                   <legend className="mb-2 w-full px-1 text-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--cj-orange)]">
                     Ingredients
@@ -639,35 +703,6 @@ export function MenuCustomizeModal() {
                   );
                 })}
               </fieldset>
-            ) : null}
-
-            {visibleRemovals.length > 0 ? (
-              <div className="mt-6">
-                <fieldset className="space-y-2">
-                  <legend className="mb-2 w-full px-1 text-center text-xs font-bold uppercase tracking-[0.2em] text-[var(--cj-orange)]">
-                    Remove
-                  </legend>
-                  {visibleRemovals.map((r) => {
-                    const rid = `${headingId}-rem-${r.id}`;
-                    return (
-                      <label
-                        key={r.id}
-                        htmlFor={rid}
-                        className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-xl border border-[rgba(255,122,0,0.14)] bg-[rgba(0,0,0,0.18)] px-3 py-2 text-left transition hover:border-[rgba(255,122,0,0.35)] has-[:checked]:border-[var(--cj-orange)]/55 has-[:checked]:bg-[rgba(255,122,0,0.08)]"
-                      >
-                        <input
-                          id={rid}
-                          type="checkbox"
-                          checked={removalIds.has(r.id)}
-                          onChange={() => toggleRemoval(r.id)}
-                          className="size-4 shrink-0 accent-[var(--cj-orange)]"
-                        />
-                        <span className="min-w-0 flex-1 text-sm font-semibold">{r.name}</span>
-                      </label>
-                    );
-                  })}
-                </fieldset>
-              </div>
             ) : null}
 
             {showToastUi ? (

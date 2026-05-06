@@ -1,16 +1,19 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, MapPin, Coffee, Croissant, Sandwich, Beef, CupSoda } from "lucide-react";
 import { cafe } from "@/lib/content";
+import { MENU_CATEGORY_ANCHOR_ID } from "@/lib/menu-data";
 
+/** Targets `BoardMenuCategory` ids; hash scrolls to category strip (below Full menu title). */
 const chips = [
-  { label: "Fresh coffee", icon: Coffee },
-  { label: "Breakfast rolls", icon: Croissant },
-  { label: "Toasted sandwiches", icon: Sandwich },
-  { label: "Burgers", icon: Beef },
-  { label: "Cold drinks", icon: CupSoda },
+  { label: "Fresh coffee", icon: Coffee, categoryId: "coffee" },
+  { label: "Breakfast rolls", icon: Croissant, categoryId: "breakfast" },
+  { label: "Toasties", icon: Sandwich, categoryId: "sandwiches" },
+  { label: "Burgers", icon: Beef, categoryId: "burgers" },
+  { label: "Cold drinks", icon: CupSoda, categoryId: "cold-drinks" },
 ] as const;
 
 export function AnimatedHero() {
@@ -48,7 +51,7 @@ export function AnimatedHero() {
             transition={{ duration: reduce ? 0.05 : 0.52, delay: reduce ? 0 : 0.1 }}
             className="mx-auto mt-6 max-w-xl font-display text-lg leading-snug text-[#e8cf9e] lg:mx-0 lg:max-w-2xl lg:text-2xl"
           >
-            Fresh coffee, breakfast rolls, toasted sandwiches, burgers and café favourites in Guildford.
+            Fresh coffee, breakfast rolls, toasties, burgers and café favourites in Guildford.
           </motion.p>
 
           <motion.span
@@ -76,12 +79,16 @@ export function AnimatedHero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: reduce ? 0.05 : 0.52, delay: reduce ? 0 : 0.26 }}
-            className="mx-auto mt-11 flex flex-wrap justify-center gap-2.5 lg:mx-0 lg:justify-start"
+            className="mx-auto mt-11 flex flex-wrap justify-center gap-2.5 lg:mx-auto lg:justify-center"
           >
-            {chips.map(({ label, icon: Icon }) => (
-              <span key={label} className="feature-chip-premium">
+            {chips.map(({ label, icon: Icon, categoryId }) => (
+              <Link
+                key={label}
+                href={`/?category=${categoryId}#${MENU_CATEGORY_ANCHOR_ID}`}
+                className="feature-chip-premium hover:border-[var(--cj-orange)]/55 hover:bg-[rgba(255,122,0,0.06)] motion-safe:transition-colors"
+              >
                 <Icon size={17} aria-hidden /> {label}
-              </span>
+              </Link>
             ))}
           </motion.div>
         </div>
