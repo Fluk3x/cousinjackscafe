@@ -19,6 +19,7 @@ export default function Home() {
       <section id="popular" className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <SectionHeading
+            align="center"
             kicker="Popular picks"
             title="Crowd favourites locals order again and again."
           />
@@ -32,6 +33,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl">
           <div className="section-panel">
             <SectionHeading
+              align="center"
               kicker="Full menu"
               title="Breakfast, sandwiches, burgers, coffee and drinks, all in one place."
             />
@@ -48,8 +50,12 @@ export default function Home() {
               background: `radial-gradient(circle at 18% 12%, rgba(255,122,0,0.09), transparent 35%), linear-gradient(150deg, var(--cj-brown), var(--cj-charcoal))`,
             }}
           >
-            <SectionHeading title="Find us in Guildford" copy="Drop in for coffee, breakfast, sandwiches and burgers. Good food, strong coffee and friendly local service." />
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <SectionHeading
+              align="center"
+              title="Find us in Guildford"
+              copy="Drop in for coffee, breakfast, sandwiches and burgers. Good food, strong coffee and friendly local service."
+            />
+            <div className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center">
               <a
                 href={cafe.googleMapsUrl}
                 target="_blank"

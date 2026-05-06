@@ -16,7 +16,7 @@ export default function ContactPage() {
           <SectionHeading
             kicker="Contact"
             title={`Reach ${cafe.name}`}
-            copy="Directions, takeaway and weekday hours—we’re glad to help with catering questions too."
+            copy="Directions, takeaway and weekday hours. We are glad to help with catering questions too."
           />
           <div className="mt-8 grid gap-4 text-sm leading-6 text-zinc-300">
             <p><strong className="text-white">Address:</strong> {cafe.address}</p>

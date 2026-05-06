@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { IntroSplash } from "@/components/intro-splash";
+import { OrderShell } from "@/components/order-shell";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { cafe } from "@/lib/content";
 
@@ -72,7 +74,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <IntroSplash />
         <div className="noise" aria-hidden="true" />
         <SiteHeader />
-        {children}
+        <OrderShell>{children}</OrderShell>
+        <SiteFooter />
       </body>
     </html>
   );

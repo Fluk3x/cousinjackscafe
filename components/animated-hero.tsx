@@ -62,7 +62,7 @@ export function AnimatedHero() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduce ? 0.05 : 0.45, delay: reduce ? 0 : 0.18 }}
-            className="mx-auto mt-8 flex w-full flex-col gap-4 sm:flex-row sm:flex-wrap lg:mx-0"
+            className="mx-auto mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center lg:mx-0 lg:items-start lg:justify-start"
           >
             <a href="#full-menu" className="primary-button shrink-0">
               View menu <ArrowRight aria-hidden size={18} />

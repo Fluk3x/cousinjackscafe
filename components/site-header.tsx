@@ -13,7 +13,7 @@ export function SiteHeader() {
   return (
     <header className="cj-header sticky top-0 z-[80] border-b border-[rgba(255,122,0,0.18)] bg-black">
       <div className="relative mx-auto flex min-h-[3.85rem] max-w-7xl items-center px-3 py-2.5 sm:min-h-[4rem] sm:px-6 sm:py-3 lg:py-[1.125rem] lg:px-8">
-        {/* Left rail — grows with nav; keeps side space for centred logo */}
+        {/* Left rail: grows with nav; keeps side space for centred logo */}
         <div className="relative z-[2] flex min-h-[3.75rem] min-w-0 flex-1 basis-0 items-center md:max-w-[min(100%,14.5rem)] lg:max-w-[min(100%,17rem)]">
           <nav className="hidden min-w-0 items-center gap-5 md:flex lg:gap-9" aria-label="Primary navigation">
             {navItems.map((item) => (

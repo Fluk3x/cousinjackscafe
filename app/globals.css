@@ -17,7 +17,18 @@
   font-family: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
 }
 
-/* Café-board grid + vignette overlays */
+dialog::backdrop {
+  background-color: rgba(5, 3, 2, 0.72);
+}
+
+/* showModal(): centre in viewport (defaults can pin the box to one side) */
+dialog.cj-roll-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  margin: 0;
+}
 .cj-texture-overlay {
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),

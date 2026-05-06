@@ -17,7 +17,7 @@ export default function MenuPage() {
           <SectionHeading
             kicker="Menu"
             title="Breakfast, sandwiches, burgers, coffee and drinks in Guildford."
-            copy="Same board as home—browse by category and order online when you’re in a hurry."
+            copy="Same board as home: browse by category and order online when you are in a hurry."
           />
           <MenuBoard categories={menuCategories} />
         </div>
