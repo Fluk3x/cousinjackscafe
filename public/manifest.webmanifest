@@ -1,0 +1,17 @@
+{
+  "name": "Cousin Jacks Café Guildford",
+  "short_name": "Cousin Jacks",
+  "description": "Coffee, breakfast, sandwiches and burgers in Guildford, NSW.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050302",
+  "theme_color": "#050302",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
