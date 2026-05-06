@@ -121,7 +121,7 @@ function MenuBoardInner({ categories, className = "mt-10" }: { categories: Board
     <div id={MENU_CATEGORY_ANCHOR_ID} className={`scroll-mt-[6.25rem] sm:scroll-mt-[6.75rem] ${className ?? ""}`}>
       <div
         ref={categoryStripRef}
-        className="cj-menu-category-scroll -mx-1 w-full cursor-grab overflow-x-auto overflow-y-hidden scroll-px-4 px-1 pb-3 active:cursor-grabbing touch-pan-x select-none"
+        className="cj-menu-category-scroll -mx-1 w-full cursor-grab snap-x snap-mandatory overflow-x-auto overflow-y-hidden scroll-px-6 px-2 pb-3 active:cursor-grabbing touch-pan-x select-none sm:scroll-px-4 sm:px-1"
         aria-label="Menu categories"
       >
         {/*
@@ -131,7 +131,7 @@ function MenuBoardInner({ categories, className = "mt-10" }: { categories: Board
         */}
         <div
           role="presentation"
-          className="mx-0 flex w-max max-w-none flex-nowrap gap-2 px-4 lg:mx-auto"
+          className="mx-0 flex w-max max-w-none flex-nowrap gap-2.5 px-3 sm:gap-3 sm:px-4 lg:mx-auto"
         >
           {categories.map((cat) => {
             const isOn = cat.id === active.id;
@@ -141,7 +141,7 @@ function MenuBoardInner({ categories, className = "mt-10" }: { categories: Board
                 ref={isOn ? activePillRef : undefined}
                 type="button"
                 onClick={() => setActiveId(cat.id)}
-                className="relative shrink-0 snap-start rounded-full border px-5 py-2.5 text-sm font-bold transition-colors"
+                className="relative min-h-[2.75rem] shrink-0 snap-center rounded-full border px-4 py-2 text-[0.8125rem] font-bold transition-colors max-[420px]:px-3.5 max-[420px]:py-2 sm:min-h-0 sm:px-5 sm:py-2.5 sm:text-sm"
                 style={{
                   borderColor: isOn ? "transparent" : "rgba(255,122,0,0.35)",
                   color: isOn ? "var(--cj-charcoal)" : "var(--cj-cream)",
@@ -176,20 +176,26 @@ function MenuBoardInner({ categories, className = "mt-10" }: { categories: Board
                 <button
                   type="button"
                   onClick={() => openCustomize(item)}
-                  className="menu-row-premium flex w-full cursor-pointer flex-row items-start justify-between gap-4 rounded-[1.2rem] border border-[rgba(255,122,0,0.16)] bg-[rgba(0,0,0,0.3)] px-5 py-4 text-left backdrop-blur-sm transition-[transform,border-color] hover:-translate-y-0.5 hover:border-[rgba(255,122,0,0.45)]"
+                  className="menu-row-premium flex w-full cursor-pointer flex-col gap-2.5 rounded-[1.2rem] border border-[rgba(255,122,0,0.16)] bg-[rgba(0,0,0,0.35)] px-5 py-4 text-left backdrop-blur-sm transition-[transform,border-color] hover:-translate-y-0.5 hover:border-[rgba(255,122,0,0.45)] sm:gap-3"
                   aria-haspopup="dialog"
                 >
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-[var(--cj-cream)]">{item.name}</h3>
-                    {item.description ? <p className="mt-1 max-w-xl text-sm leading-relaxed text-[var(--cj-cream)]/70">{item.description}</p> : null}
-                    {item.upgradeNote ? (
-                      <p className="mt-1.5 max-w-xl text-xs font-medium leading-relaxed text-[var(--cj-gold)]/90">{item.upgradeNote}</p>
-                    ) : null}
+                  <div className="flex w-full flex-row items-start justify-between gap-3">
+                    <h3 className="min-w-0 flex-1 text-balance font-display text-[clamp(1rem,3.8vw,1.2rem)] font-semibold leading-snug text-[var(--cj-cream)] sm:text-[1.125rem]">
+                      {item.name}
+                    </h3>
+                    <p className="shrink-0 whitespace-nowrap font-display text-[clamp(1rem,3.6vw,1.25rem)] font-bold leading-none text-[var(--cj-orange)]">
+                      {item.price}
+                    </p>
                   </div>
-                  <div className="flex shrink-0 flex-col items-end gap-1 text-right sm:pt-0.5">
-                    <p className="text-lg font-bold text-[var(--cj-orange)]">{item.price}</p>
-                    <span className="text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[var(--cj-cream)]/45">Tap to customise</span>
-                  </div>
+                  {item.description ? (
+                    <p className="w-full text-sm leading-relaxed text-[var(--cj-cream)]/70">{item.description}</p>
+                  ) : null}
+                  {item.upgradeNote ? (
+                    <p className="w-full text-xs font-medium leading-relaxed text-[var(--cj-gold)]/90">{item.upgradeNote}</p>
+                  ) : null}
+                  <p className="text-center text-[0.65rem] font-bold uppercase tracking-[0.12em] text-[var(--cj-cream)]/45 sm:text-left">
+                    Tap to customise
+                  </p>
                 </button>
               </li>
             );
@@ -197,13 +203,15 @@ function MenuBoardInner({ categories, className = "mt-10" }: { categories: Board
           return (
             <li
               key={item.id}
-              className="menu-row-premium flex flex-row items-start justify-between gap-4 rounded-[1.2rem] border border-[rgba(255,122,0,0.16)] bg-[rgba(0,0,0,0.3)] px-5 py-4 backdrop-blur-sm"
+              className="menu-row-premium flex flex-col gap-2.5 rounded-[1.2rem] border border-[rgba(255,122,0,0.16)] bg-[rgba(0,0,0,0.35)] px-5 py-4 backdrop-blur-sm sm:gap-3"
             >
-              <div className="min-w-0 flex-1">
-                <h3 className="text-[var(--cj-cream)]">{item.name}</h3>
-                {item.description ? <p className="mt-1 max-w-xl text-sm leading-relaxed text-[var(--cj-cream)]/70">{item.description}</p> : null}
+              <div className="flex w-full flex-row items-start justify-between gap-3">
+                <h3 className="min-w-0 flex-1 text-balance font-display text-[clamp(1rem,3.8vw,1.2rem)] font-semibold leading-snug text-[var(--cj-cream)] sm:text-[1.125rem]">
+                  {item.name}
+                </h3>
+                <p className="shrink-0 whitespace-nowrap font-display text-[clamp(1rem,3.6vw,1.25rem)] font-bold leading-none text-[var(--cj-orange)]">{item.price}</p>
               </div>
-              <p className="shrink-0 text-right text-lg font-bold text-[var(--cj-orange)] sm:pt-0.5">{item.price}</p>
+              {item.description ? <p className="w-full text-sm leading-relaxed text-[var(--cj-cream)]/70">{item.description}</p> : null}
             </li>
           );
         })}

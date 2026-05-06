@@ -1,43 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-const STORAGE_KEY = "cj-intro-splash-complete";
+/** Once per browser tab/session — new tab = new session (splash can play again). */
+const SESSION_KEY = "cj-splash-session-shown";
 
 export function IntroSplash() {
   const prefersReducedMotion = useReducedMotion();
-  const [ready, setReady] = useState(false);
-  const [visible, setVisible] = useState(false);
+  /** Start visible so the overlay paints with first paint; hide after check if already seen this session. */
+  const [visible, setVisible] = useState(true);
+  const skipTimerRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     try {
-      if (typeof window !== "undefined" && localStorage.getItem(STORAGE_KEY)) {
-        setReady(true);
-        return;
+      if (sessionStorage.getItem(SESSION_KEY)) {
+        skipTimerRef.current = true;
+        setVisible(false);
       }
     } catch {
       /* private mode etc. */
     }
-    setVisible(true);
-    setReady(true);
   }, []);
 
   useEffect(() => {
-    if (!visible) return undefined;
-    const ms = prefersReducedMotion ? 350 : 2800;
+    if (!visible || skipTimerRef.current) return undefined;
+    const ms = prefersReducedMotion ? 450 : 1700;
     const t = window.setTimeout(() => setVisible(false), ms);
     return () => window.clearTimeout(t);
   }, [visible, prefersReducedMotion]);
-
-  if (!ready) return null;
 
   return (
     <AnimatePresence
       mode="sync"
       onExitComplete={() => {
         try {
-          localStorage.setItem(STORAGE_KEY, "1");
+          sessionStorage.setItem(SESSION_KEY, "1");
         } catch {
           /* ignore */
         }
@@ -61,7 +59,6 @@ export function IntroSplash() {
               <motion.div aria-hidden className="cj-css-steam cj-css-steam--two absolute -top-[6.85rem] left-1/2 z-[3] -translate-x-1/2" />
               <motion.div aria-hidden className="cj-css-steam cj-css-steam--three absolute -top-[6.85rem] left-[58%] z-[3]" />
 
-              {/* Cup mark only (no wordmark block) */}
               <motion.img
                 src="/cousin_jacks_logo.png"
                 alt=""
@@ -69,9 +66,7 @@ export function IntroSplash() {
                 height={340}
                 className="relative z-[2] h-auto w-[min(220px,48vw)] max-w-none select-none bg-transparent object-contain"
                 initial={
-                  prefersReducedMotion
-                    ? { opacity: 1 }
-                    : { opacity: 0, scale: 0.88, filter: "blur(8px)", y: 14 }
+                  prefersReducedMotion ? { opacity: 1 } : { opacity: 0, scale: 0.88, filter: "blur(8px)", y: 14 }
                 }
                 animate={{
                   opacity: 1,

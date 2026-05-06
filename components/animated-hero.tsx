@@ -25,13 +25,13 @@ export function AnimatedHero() {
       <div className="cj-board-vignette absolute inset-0 -z-[1] opacity-[0.45]" aria-hidden />
       <div aria-hidden className="cj-texture-overlay pointer-events-none absolute inset-0 -z-[1] opacity-[0.42]" />
 
-      <div className="relative mx-auto grid max-w-7xl gap-14 px-4 py-14 sm:px-6 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-16 lg:px-8 lg:py-16">
+      <div className="relative mx-auto grid max-w-7xl gap-10 px-4 py-10 sm:gap-12 sm:px-6 sm:py-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-16 lg:px-8 lg:py-16">
         <div className="flex flex-col text-center lg:items-start lg:text-left">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduce ? 0.05 : 0.45 }}
-            className="mb-5 text-[0.7rem] font-bold uppercase tracking-[0.38em] text-[rgba(246,182,74,0.95)] md:text-[0.72rem]"
+            className="mb-4 text-[0.7rem] font-bold uppercase tracking-[0.38em] text-[rgba(246,182,74,0.95)] sm:mb-5 md:text-[0.72rem]"
           >
             Guildford local café
           </motion.p>
@@ -40,16 +40,16 @@ export function AnimatedHero() {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduce ? 0.05 : 0.52, delay: reduce ? 0 : 0.04 }}
-            className="font-display text-balance text-[2.65rem] font-semibold leading-[1.06] tracking-tight text-[var(--cj-cream)] sm:text-6xl xl:text-[4.05rem]"
+            className="font-display text-balance text-[clamp(2.25rem,10.5vw,2.65rem)] font-semibold leading-[1.06] tracking-tight text-[var(--cj-cream)] sm:text-6xl xl:text-[4.05rem]"
           >
-            Cousin Jacks Café
+            Cousin Jacks Café Guildford
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduce ? 0.05 : 0.52, delay: reduce ? 0 : 0.1 }}
-            className="mx-auto mt-6 max-w-xl font-display text-lg leading-snug text-[#e8cf9e] lg:mx-0 lg:max-w-2xl lg:text-2xl"
+            className="mx-auto mt-4 max-w-xl font-display text-[clamp(1rem,4.2vw,1.35rem)] leading-snug text-[#e8cf9e] sm:mt-6 sm:text-lg lg:mx-0 lg:max-w-2xl lg:text-2xl"
           >
             Fresh coffee, breakfast rolls, toasties, burgers and café favourites in Guildford.
           </motion.p>
@@ -58,14 +58,14 @@ export function AnimatedHero() {
             initial={{ opacity: 0, scaleX: 0.25 }}
             animate={{ opacity: 1, scaleX: 1 }}
             transition={{ duration: reduce ? 0.05 : 0.52, delay: reduce ? 0 : 0.14 }}
-            className="mx-auto mt-8 h-[3px] w-28 origin-center rounded-full bg-gradient-to-r from-transparent via-[var(--cj-orange)] to-transparent lg:mx-0"
+            className="mx-auto mt-6 h-[3px] w-28 origin-center rounded-full bg-gradient-to-r from-transparent via-[var(--cj-orange)] to-transparent sm:mt-8 lg:mx-0"
           />
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reduce ? 0.05 : 0.45, delay: reduce ? 0 : 0.18 }}
-            className="mx-auto mt-8 flex w-full flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:justify-center lg:mx-0 lg:items-start lg:justify-start"
+            className="mx-auto mt-6 flex w-full flex-col items-center gap-4 sm:mt-8 sm:flex-row sm:flex-wrap sm:justify-center lg:mx-0 lg:items-start lg:justify-start"
           >
             <a href="#full-menu" className="primary-button shrink-0">
               View Menu <ArrowRight aria-hidden size={18} />
@@ -79,7 +79,7 @@ export function AnimatedHero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: reduce ? 0.05 : 0.52, delay: reduce ? 0 : 0.26 }}
-            className="mx-auto mt-11 flex flex-wrap justify-center gap-2.5 lg:mx-auto lg:justify-center"
+            className="mx-auto mt-8 flex flex-wrap justify-center gap-2.5 max-sm:mt-7 lg:mx-auto lg:justify-center"
           >
             {chips.map(({ label, icon: Icon, categoryId }) => (
               <Link
@@ -111,7 +111,7 @@ export function AnimatedHero() {
               alt=""
               width={200}
               height={240}
-              className="pointer-events-none absolute bottom-[15%] right-[38%] z-[1] w-[clamp(96px,16vw,140px)] select-none opacity-[1.0]"
+              className="pointer-events-none absolute bottom-[15%] right-[38%] z-[1] w-[clamp(96px,16vw,140px)] select-none opacity-[0.92]"
             />
           </div>
         </motion.div>

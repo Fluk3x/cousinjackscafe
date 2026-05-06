@@ -452,7 +452,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "bacon-egg-roll",
         name: "Bacon & Egg Roll",
-        description: "Crispy Bacon, Fried Egg And Sauce.",
+        description: "Crispy bacon, fried egg and sauce.",
         price: "From $8.50",
         popular: true,
         customization: {
@@ -467,7 +467,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "breakfast-wrap",
         name: "Breakfast Wrap",
-        description: "Bacon, Scrambled Egg And Cheese.",
+        description: "Bacon, scrambled egg and cheese.",
         price: "From $8.50",
         customization: {
           primarySectionTitle: "Choose Version",
@@ -484,7 +484,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "halloumi-breakfast-wrap",
         name: "Halloumi Breakfast Wrap",
-        description: "Grilled Halloumi, Fried Egg, Hash Brown And Spinach.",
+        description: "Grilled halloumi, fried egg, hash brown and spinach.",
         price: "$12.00",
         basePriceCents: 1200,
         customization: {
@@ -501,7 +501,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "toastie",
         name: "Toasties",
-        description: "Cheese; Cheese & Tomato; Ham & Cheese; Ham, Cheese & Tomato; Avocado.",
+        description: "Cheese; cheese & tomato; ham & cheese; ham, cheese & tomato; avocado.",
         price: "From $8.00",
         basePriceCents: 800,
         customization: {
@@ -529,7 +529,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "grilled-chicken-sandwich",
         name: "Grilled Chicken Sandwich",
-        description: "Grilled Chicken, Avocado, Lettuce, Cheese & Mayo",
+        description: "Grilled chicken, avocado, lettuce, cheese and mayo.",
         price: "$13.50",
         popular: true,
         basePriceCents: 1350,
@@ -538,7 +538,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "reuben-sandwich",
         name: "Reuben Sandwich",
-        description: "Corned Beef, Swiss Cheese, Sauerkraut, Gherkins, Thousand Island Dressing",
+        description: "Corned beef, Swiss cheese, sauerkraut, gherkins, Thousand Island dressing.",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -552,7 +552,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "mortadella-sandwich",
         name: "Mortadella Sandwich",
-        description: "Mortadella, Mozzarella, Basil Pesto, Sundried Tomato",
+        description: "Mortadella, mozzarella, basil pesto, sundried tomato.",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -566,7 +566,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "mediterranean-veggie-sandwich",
         name: "Mediterranean Veggie Sandwich",
-        description: "Grilled Zucchini, Roasted Capsicum, Eggplant, Feta, Basil Pesto, Rocket",
+        description: "Grilled zucchini, roasted capsicum, eggplant, feta, basil pesto, rocket.",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -580,7 +580,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "blat",
         name: "BLAT",
-        description: "Bacon, Lettuce, Avocado, Tomato & Mayo",
+        description: "Bacon, lettuce, avocado, tomato and mayo.",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(1350, "$13.50", SIDES_BLAT_SW, [rm.bacon, rm.lettuce, rm.avocado, rm.tomato], sandwichSauceMayoDefault),
@@ -588,7 +588,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "chicken-bacon-sandwich",
         name: "Chicken Bacon Sandwich",
-        description: "Lettuce, Tomato & Mayo",
+        description: "Lettuce, tomato and mayo.",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -602,7 +602,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "chicken-schnitzel-sandwich",
         name: "Chicken Schnitzel Sandwich",
-        description: "Lettuce, Tomato & Mayo",
+        description: "Lettuce, tomato and mayo.",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -622,7 +622,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "cheese-burger",
         name: "Cheese Burger",
-        description: "Beef Patty, Double Cheese, Tomato, Pickles With Special Sauce",
+        description: "Beef patty, double cheese, tomato, pickles with special sauce.",
         price: "$12.90",
         basePriceCents: 1290,
         customization: burgerCustom(1290, "$12.90", "special", [rm.beefPatty, rm.cheese, rm.tomato, rm.pickles], burgerSides("Bacon")),
@@ -630,7 +630,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "cj-special-burger",
         name: "CJ Special Burger",
-        description: "Double Beef, Double Cheese, Bacon, Caramelised Onion, Tomato, Pickles, Special Sauce",
+        description: "Double beef, double cheese, bacon, caramelised onion, tomato, pickles, special sauce.",
         price: "$16.90",
         popular: true,
         basePriceCents: 1690,
@@ -646,7 +646,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "crispy-chicken-burger",
         name: "Crispy Chicken Burger",
-        description: "Fried Chicken, Slaw, Jalapeño With Chilli Mayo",
+        description: "Fried chicken, slaw, jalapeño with chilli mayo.",
         price: "$13.90",
         basePriceCents: 1390,
         customization: burgerCustom(1390, "$13.90", "chilli-mayo", [rm.chicken, rm.slaw, rm.jalapeno], burgerSides("Bacon")),
@@ -654,7 +654,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "grilled-chicken-burger",
         name: "Grilled Chicken Burger",
-        description: "Grilled Chicken, Tomato, Lettuce, Cheese With Mayo",
+        description: "Grilled chicken, tomato, lettuce, cheese with mayo.",
         price: "$12.90",
         basePriceCents: 1290,
         customization: burgerCustom(1290, "$12.90", "mayo", [rm.chicken, rm.tomato, rm.lettuce, rm.cheese], burgerSides("Bacon")),
@@ -704,7 +704,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "flat-white",
         name: "Flat White",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$4.50 / $5.00 / $6.00",
         popular: true,
         customization: coffeeStyle(COFFEE_SIZES_STANDARD),
@@ -712,28 +712,28 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "latte",
         name: "Latte",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$4.50 / $5.00 / $6.00",
         customization: coffeeStyle(COFFEE_SIZES_STANDARD),
       },
       {
         id: "cappuccino",
         name: "Cappuccino",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$4.50 / $5.00 / $6.00",
         customization: coffeeStyle(COFFEE_SIZES_STANDARD),
       },
       {
         id: "long-black",
         name: "Long Black",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$4.50 / $5.00 / $6.00",
         customization: coffeeStyle(COFFEE_SIZES_STANDARD),
       },
       {
         id: "mocha",
         name: "Mocha",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$5.00 / $5.50 / $6.50",
         customization: coffeeStyle(MOCHA_SIZES),
       },
@@ -746,28 +746,28 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "hot-chocolate",
         name: "Hot Chocolate",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$5.00 / $5.50 / $6.50",
         customization: coffeeStyle(MOCHA_SIZES),
       },
       {
         id: "chai-latte",
         name: "Chai Latte",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$5.00 / $5.50 / $6.50",
         customization: coffeeStyle(MOCHA_SIZES),
       },
       {
         id: "matcha-latte",
         name: "Matcha Latte",
-        description: "Small / Large / Jumbo",
+        description: "Small, large or jumbo.",
         price: "$6.00 / $6.50 / $7.00",
         customization: coffeeStyle(MATCHA_SIZES),
       },
       {
         id: "tea-pot",
         name: "Tea",
-        description: "English Breakfast, Earl Grey, Peppermint, Green Tea, Chamomile",
+        description: "English Breakfast, Earl Grey, peppermint, green tea, chamomile.",
         price: "$5.00",
         basePriceCents: 500,
         customization: {
@@ -832,27 +832,27 @@ export const popularPicks: PopularPickHighlight[] = [
   {
     menuItemId: "bacon-egg-roll",
     photo: POPULAR_PHOTO_URLS.baconEggRoll,
-    description: "Crispy Bacon, Fried Egg And Sauce. Customise For Monster Roll, Double Bacon, Cheese & Hash.",
+    description: "Crispy bacon, fried egg and sauce. Customise for monster roll, double bacon, cheese and hash.",
   },
   {
     menuItemId: "grilled-chicken-sandwich",
     photo: POPULAR_PHOTO_URLS.grilledChickenSandwich,
-    description: "Grilled Chicken, Avocado, Lettuce, Cheese And Mayo.",
+    description: "Grilled chicken, avocado, lettuce, cheese and mayo.",
   },
   {
     menuItemId: "cj-special-burger",
     photo: POPULAR_PHOTO_URLS.cjSpecialBurger,
-    description: "Double Beef, Bacon, Caramelised Onion And Special Sauce.",
+    description: "Double beef, bacon, caramelised onion and special sauce.",
   },
   {
     menuItemId: "flat-white",
     photo: POPULAR_PHOTO_URLS.flatWhite,
-    description: "Smooth Espresso With Velvety Milk.",
+    description: "Smooth espresso with velvety milk.",
   },
   {
     menuItemId: "iced-latte",
     photo: POPULAR_PHOTO_URLS.icedLatte,
-    description: "Cold, Smooth And Balanced.",
+    description: "Cold, smooth and balanced.",
   },
 ];
 

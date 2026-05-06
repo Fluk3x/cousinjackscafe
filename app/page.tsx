@@ -39,14 +39,17 @@ export default function Home() {
             <SectionHeading
               align="center"
               kicker="Full menu"
-              title="Breakfast, Toasties, Burgers, Coffee And Drinks, All In One Place."
+              title="Breakfast, toasties, burgers, coffee and drinks, all in one place."
             />
             <MenuBoard categories={menuCategories} className="mt-7" />
           </div>
         </div>
       </section>
 
-      <section id="visit" className="px-4 py-20 sm:px-6 lg:px-8">
+      <section
+        id="visit"
+        className="scroll-mt-[4.75rem] px-4 py-20 sm:scroll-mt-[5rem] sm:px-6 lg:px-8"
+      >
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.88fr]">
           <div
             className="rounded-[2.25rem] border border-[rgba(255,122,0,0.14)] p-6 shadow-2xl shadow-black/30 sm:p-10"

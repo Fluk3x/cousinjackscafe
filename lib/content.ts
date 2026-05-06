@@ -5,7 +5,7 @@ export const cafe = {
   region: "NSW",
   country: "Australia",
   tagline: "Fresh coffee, breakfast rolls, toasted sandwiches, burgers and café favourites in Guildford.",
-  shortTagline: "Coffee, breakfast, sandwiches and burgers in Guildford.",
+  shortTagline: "Cousin Jacks Café in Guildford, NSW — coffee, breakfast rolls, toasties, sandwiches, burgers and lunch.",
   phone: "+61 000 000 000",
   email: "hello@cousinjacks.cafe",
   address: "Guildford, NSW 2161",

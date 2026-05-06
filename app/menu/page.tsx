@@ -16,7 +16,7 @@ export default function MenuPage() {
         <div className="section-panel">
           <SectionHeading
             kicker="Menu"
-            title="Breakfast, Toasties, Burgers, Coffee And Drinks In Guildford."
+            title="Breakfast, toasties, burgers, coffee and drinks in Guildford."
             copy="Same board as home: browse by category and order online when you are in a hurry."
           />
           <MenuBoard categories={menuCategories} />
