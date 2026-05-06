@@ -104,16 +104,16 @@ export function AnimatedHero() {
             className="relative mx-auto aspect-[520/414] overflow-hidden rounded-[2rem] border border-[rgba(255,122,0,0.16)] bg-black shadow-[0_28px_64px_rgba(0,0,0,0.45)]"
           >
             <HeroCoffeeArt />
+            {/* eslint-disable-next-line @next/next/no-img-element -- faint watermark on main page only */}
+            <img
+              aria-hidden
+              src="/cousin_jacks_logo.png"
+              alt=""
+              width={200}
+              height={240}
+              className="pointer-events-none absolute bottom-[15%] right-[38%] z-[1] w-[clamp(96px,16vw,140px)] select-none opacity-[1.0]"
+            />
           </div>
-          {/* eslint-disable-next-line @next/next/no-img-element -- faint watermark on main page only */}
-          <img
-            aria-hidden
-            src="/cousin_jacks_logo.png"
-            alt=""
-            width={200}
-            height={240}
-            className="pointer-events-none absolute -bottom-10 right-[4%] w-[clamp(112px,19vw,164px)] select-none opacity-[0.12]"
-          />
         </motion.div>
       </div>
     </section>

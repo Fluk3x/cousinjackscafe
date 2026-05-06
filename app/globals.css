@@ -211,13 +211,13 @@ dialog.cj-roll-dialog {
   }
 }
 
-/* Popular pick photo tile */
+/* Popular pick photo tile — solid black so PNGs with transparency match punchier assets (e.g. latte on black). */
 .pick-photo-shell {
   position: relative;
   aspect-ratio: 5 / 4;
   border-radius: 0.92rem;
   border: 1px solid rgba(255, 122, 0, 0.24);
-  background: #070605;
+  background: #000000;
   overflow: hidden;
 }
 
