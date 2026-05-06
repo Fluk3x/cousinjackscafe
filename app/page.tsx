@@ -35,7 +35,7 @@ export default function Home() {
             <SectionHeading
               align="center"
               kicker="Full menu"
-              title="Breakfast, sandwiches, burgers, coffee and drinks, all in one place."
+              title="Breakfast, Sandwiches, Burgers, Coffee And Drinks, All In One Place."
             />
             <MenuBoard categories={menuCategories} className="mt-7" />
           </div>

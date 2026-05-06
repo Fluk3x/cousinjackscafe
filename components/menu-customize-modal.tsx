@@ -272,35 +272,27 @@ export function MenuCustomizeModal() {
   };
 
   const renderAddonCheckbox = (a: RollAddOn, keyPrefix: string) => {
-    const bundled = a.excludeForVariantIds?.includes(variantId) ?? false;
     const selected = addOnIds.has(a.id);
     const aid = `${headingId}-${keyPrefix}-${a.id}`;
-    const priceLabel = !bundled ? (
-      <span
-        className={`shrink-0 pt-0.5 font-display text-sm text-[var(--cj-orange)] ${selected ? "" : "opacity-[0.72]"}`}
-      >
-        +{audFromCents(a.priceCents)}
-      </span>
-    ) : selected ? (
-      <span className="shrink-0 pt-0.5 text-right text-[0.7rem] font-semibold text-[var(--cj-cream)]/48">No extra</span>
-    ) : (
-      <span className="shrink-0 pt-0.5 text-right font-display text-sm text-[var(--cj-orange)]">-{audFromCents(a.priceCents)}</span>
-    );
     return (
       <label
         key={aid}
         htmlFor={aid}
-        className="flex w-full cursor-pointer flex-row items-start gap-3 rounded-xl border border-[rgba(255,122,0,0.18)] bg-[rgba(0,0,0,0.22)] px-3 py-2.5 text-left transition hover:border-[rgba(255,122,0,0.4)]"
+        className="flex w-full cursor-pointer flex-row items-start gap-3 rounded-xl border border-[rgba(255,122,0,0.18)] bg-[rgba(0,0,0,0.22)] px-3 py-2.5 text-left transition hover:border-[rgba(255,122,0,0.45)] has-[:checked]:border-[var(--cj-orange)]/55 has-[:checked]:bg-[rgba(255,122,0,0.08)]"
       >
         <input
           id={aid}
           type="checkbox"
-          checked={addOnIds.has(a.id)}
+          checked={selected}
           onChange={() => toggleAddOn(a.id)}
           className="mt-0.5 size-4 shrink-0 accent-[var(--cj-orange)]"
         />
         <span className="min-w-0 flex-1 text-sm font-semibold">{a.name}</span>
-        {priceLabel}
+        <span
+          className={`shrink-0 pt-0.5 font-display text-sm text-[var(--cj-orange)] ${selected ? "" : "opacity-[0.72]"}`}
+        >
+          +{audFromCents(a.priceCents)}
+        </span>
       </label>
     );
   };
@@ -340,9 +332,9 @@ export function MenuCustomizeModal() {
     });
   };
 
-  const primaryTitle = custom?.primarySectionTitle ?? "Choose options";
+  const primaryTitle = custom?.primarySectionTitle ?? "Choose Options";
   const secondaryTitle = custom?.secondarySectionTitle ?? "Options";
-  const toastTitle = custom?.toastSectionTitle ?? "Toast level";
+  const toastTitle = custom?.toastSectionTitle ?? "Toast Level";
   const sauceTitle = custom?.sauceSectionTitle ?? "Sauce";
   const blockBeforeMilk = showPrimaryUi;
   const blockBeforeCombo = blockBeforeMilk || milkOptions.length > 0;
@@ -452,8 +444,8 @@ export function MenuCustomizeModal() {
                           className="size-4 shrink-0 accent-[var(--cj-orange)]"
                         />
                         <span className="min-w-0 flex-1 text-sm font-semibold">{m.label}</span>
-                        <span className="shrink-0 font-display text-sm text-[var(--cj-orange)]">
-                          {m.priceCents > 0 ? `+${audFromCents(m.priceCents)}` : "Included"}
+                        <span className="shrink-0 min-w-[3rem] text-right font-display text-sm tabular-nums text-[var(--cj-orange)]">
+                          {m.priceCents > 0 ? `+${audFromCents(m.priceCents)}` : ""}
                         </span>
                       </label>
                     );
@@ -506,8 +498,8 @@ export function MenuCustomizeModal() {
                         className="size-4 shrink-0 accent-[var(--cj-orange)]"
                       />
                       <span className="min-w-0 flex-1 text-sm font-semibold leading-snug">{s.label}</span>
-                      <span className="shrink-0 font-display text-sm text-[var(--cj-orange)]">
-                        {s.priceCents > 0 ? `+${audFromCents(s.priceCents)}` : s.price}
+                      <span className="shrink-0 min-w-[3rem] text-right font-display text-sm tabular-nums text-[var(--cj-orange)]">
+                        {s.priceCents > 0 ? `+${audFromCents(s.priceCents)}` : ""}
                       </span>
                     </label>
                   );
@@ -537,8 +529,8 @@ export function MenuCustomizeModal() {
                         className="size-4 shrink-0 accent-[var(--cj-orange)]"
                       />
                       <span className="min-w-0 flex-1 text-sm font-semibold leading-snug">{c.label}</span>
-                      <span className="shrink-0 font-display text-sm text-[var(--cj-orange)]">
-                        {c.priceCents > 0 ? `+${audFromCents(c.priceCents)}` : c.price}
+                      <span className="shrink-0 min-w-[3rem] text-right font-display text-sm tabular-nums text-[var(--cj-orange)]">
+                        {c.priceCents > 0 ? `+${audFromCents(c.priceCents)}` : ""}
                       </span>
                     </label>
                   );
@@ -558,7 +550,7 @@ export function MenuCustomizeModal() {
                       <label
                         key={r.id}
                         htmlFor={rid}
-                        className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-xl border border-[rgba(255,122,0,0.14)] bg-[rgba(0,0,0,0.18)] px-3 py-2 text-left"
+                        className="flex w-full cursor-pointer flex-row items-center gap-3 rounded-xl border border-[rgba(255,122,0,0.14)] bg-[rgba(0,0,0,0.18)] px-3 py-2 text-left transition hover:border-[rgba(255,122,0,0.35)] has-[:checked]:border-[var(--cj-orange)]/55 has-[:checked]:bg-[rgba(255,122,0,0.08)]"
                       >
                         <input
                           id={rid}
@@ -606,7 +598,6 @@ export function MenuCustomizeModal() {
 
             <div className="mt-6 rounded-xl border border-[rgba(255,122,0,0.2)] bg-[rgba(0,0,0,0.28)] px-4 py-3 text-left">
               <p className="font-display text-lg font-semibold text-[var(--cj-gold)]">Total {audFromCents(totalCents)}</p>
-              <p className="mt-1 text-[0.7rem] leading-relaxed text-[var(--cj-cream)]/45">Guide only. Confirm the final price when you order.</p>
             </div>
 
             <label className="mt-6 block text-left">
@@ -615,7 +606,7 @@ export function MenuCustomizeModal() {
                 value={instructions}
                 onChange={(e) => setInstructions(e.target.value)}
                 rows={3}
-                placeholder="No sauce, extra crispy, cut in half…"
+                placeholder="No Sauce, Extra Crispy, Cut In Half…"
                 className="mt-2 w-full resize-none rounded-xl border border-[rgba(255,122,0,0.2)] bg-[var(--cj-brown)]/90 px-3 py-2.5 text-left text-sm text-[var(--cj-soft)] outline-none ring-[var(--cj-orange)]/20 placeholder:text-[var(--cj-cream)]/35 focus:border-[var(--cj-orange)]/45 focus:ring-2"
               />
             </label>

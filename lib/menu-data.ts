@@ -74,20 +74,20 @@ export type BoardMenuCategory = {
 /* --- Shared presets (draft café pricing) --- */
 
 const MILK_STANDARD: NonNullable<ItemCustomizationConfig["milkOptions"]> = [
-  { id: "full", label: "Full cream", priceCents: 0 },
+  { id: "full", label: "Full Cream", priceCents: 0 },
   { id: "skim", label: "Skim", priceCents: 0 },
   { id: "soy", label: "Soy", priceCents: 100 },
   { id: "almond", label: "Almond", priceCents: 100 },
   { id: "oat", label: "Oat", priceCents: 100 },
-  { id: "lactose", label: "Lactose free", priceCents: 100 },
+  { id: "lactose", label: "Lactose Free", priceCents: 100 },
 ];
 
 const COFFEE_DRINK_ADDONS: RollAddOn[] = [
-  { id: "extra-shot", name: "Extra shot", priceCents: 50 },
+  { id: "extra-shot", name: "Extra Shot", priceCents: 50 },
   { id: "decaf", name: "Decaf", priceCents: 50 },
-  { id: "syrup-caramel", name: "Caramel syrup", priceCents: 100 },
-  { id: "syrup-vanilla", name: "Vanilla syrup", priceCents: 100 },
-  { id: "syrup-hazelnut", name: "Hazelnut syrup", priceCents: 100 },
+  { id: "syrup-caramel", name: "Caramel Syrup", priceCents: 100 },
+  { id: "syrup-vanilla", name: "Vanilla Syrup", priceCents: 100 },
+  { id: "syrup-hazelnut", name: "Hazelnut Syrup", priceCents: 100 },
 ];
 
 const COFFEE_SIZES_STANDARD: RollVariantChoice[] = [
@@ -108,25 +108,25 @@ const MATCHA_SIZES: RollVariantChoice[] = [
   { id: "j", label: "Jumbo", price: "$7.00", priceCents: 700 },
 ];
 
-const CHIPS_COMBO_ADDON: RollAddOn = { id: "chips-combo", name: "Chips & soft drink combo", priceCents: 500 };
+const CHIPS_COMBO_ADDON: RollAddOn = { id: "chips-combo", name: "Chips & Soft Drink Combo", priceCents: 500 };
 
 /** Meaty / mixed deli sandwiches — use "Bacon" when the sandwich does not already list bacon. */
-function sandwichMeatSides(bacon: "Bacon" | "Extra bacon"): RollAddOn[] {
+function sandwichMeatSides(bacon: "Bacon" | "Extra Bacon"): RollAddOn[] {
   return [
     { id: "extra-bacon", name: bacon, priceCents: 400 },
-    { id: "extra-cheese", name: "Extra cheese", priceCents: 150 },
+    { id: "extra-cheese", name: "Extra Cheese", priceCents: 150 },
     { id: "avocado", name: "Avocado", priceCents: 400 },
-    { id: "hash-brown", name: "Hash brown", priceCents: 500 },
-    { id: "extra-chicken", name: "Extra chicken", priceCents: 500 },
-    { id: "extra-schnitzel", name: "Extra schnitzel", priceCents: 500 },
+    { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
+    { id: "extra-chicken", name: "Extra Chicken", priceCents: 500 },
+    { id: "extra-schnitzel", name: "Extra Schnitzel", priceCents: 500 },
     { id: "halloumi", name: "Halloumi", priceCents: 450 },
   ];
 }
 
 const sandwichVegetarianSides: RollAddOn[] = [
-  { id: "extra-cheese", name: "Extra cheese", priceCents: 150 },
+  { id: "extra-cheese", name: "Extra Cheese", priceCents: 150 },
   { id: "avocado", name: "Avocado", priceCents: 400 },
-  { id: "hash-brown", name: "Hash brown", priceCents: 500 },
+  { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
   { id: "halloumi", name: "Halloumi", priceCents: 450 },
 ];
 
@@ -134,68 +134,68 @@ const SIDES_GRILLED_CHICKEN_SW = sandwichMeatSides("Bacon");
 const SIDES_REUBEN_SW = sandwichMeatSides("Bacon");
 const SIDES_MORTADELLA_SW = sandwichMeatSides("Bacon");
 const SIDES_MEDITERRANEAN_SW = sandwichVegetarianSides;
-const SIDES_BLAT_SW = sandwichMeatSides("Extra bacon");
-const SIDES_CHICKEN_BACON_SW = sandwichMeatSides("Extra bacon");
+const SIDES_BLAT_SW = sandwichMeatSides("Extra Bacon");
+const SIDES_CHICKEN_BACON_SW = sandwichMeatSides("Extra Bacon");
 const SIDES_SCHNITZEL_SW = sandwichMeatSides("Bacon");
 
 const rm: Record<string, RemovalChoice> = {
-  mayo: { id: "no-mayo", name: "No mayo" },
-  cheese: { id: "no-cheese", name: "No cheese" },
-  feta: { id: "no-feta", name: "No feta" },
-  tomato: { id: "no-tomato", name: "No tomato" },
-  lettuce: { id: "no-lettuce", name: "No lettuce" },
-  pesto: { id: "no-pesto", name: "No pesto" },
-  rocket: { id: "no-rocket", name: "No rocket" },
-  pickles: { id: "no-pickles", name: "No pickles" },
-  onion: { id: "no-onion", name: "No onion" },
-  bacon: { id: "no-bacon", name: "No bacon" },
-  avocado: { id: "no-avocado", name: "No avocado" },
-  sauerkraut: { id: "no-sauerkraut", name: "No sauerkraut" },
-  thousandIsland: { id: "no-thousand-island", name: "No Thousand Island dressing" },
-  mozzarella: { id: "no-mozzarella", name: "No mozzarella" },
-  sundriedTomato: { id: "no-sundried-tomato", name: "No sundried tomato" },
-  zucchini: { id: "no-zucchini", name: "No zucchini" },
-  capsicum: { id: "no-capsicum", name: "No capsicum (pepper)" },
-  eggplant: { id: "no-eggplant", name: "No eggplant" },
-  mortadella: { id: "no-mortadella", name: "No mortadella" },
-  chicken: { id: "no-chicken", name: "No chicken" },
-  cornedBeef: { id: "no-corned-beef", name: "No corned beef" },
-  beefPatty: { id: "no-beef-patty", name: "No beef patty" },
-  specialSauce: { id: "no-special-sauce", name: "No special sauce" },
-  slaw: { id: "no-slaw", name: "No slaw" },
-  jalapeno: { id: "no-jalapeno", name: "No jalapeños" },
-  chilliMayo: { id: "no-chilli-mayo", name: "No chilli mayo" },
-  caramelOnion: { id: "no-caramelised-onion", name: "No caramelised onion" },
-  scrambledEgg: { id: "no-scrambled-egg", name: "No scrambled egg" },
-  ham: { id: "no-ham", name: "No ham" },
-  sauce: { id: "no-sauce", name: "No sauce" },
-  eggFried: { id: "no-fried-egg", name: "No fried egg" },
-  spinach: { id: "no-spinach", name: "No spinach" },
-  hashBrown: { id: "no-hash-brown", name: "No hash brown" },
-  halloumi: { id: "no-halloumi", name: "No halloumi" },
-  schnitzel: { id: "no-schnitzel", name: "No schnitzel" },
+  mayo: { id: "no-mayo", name: "No Mayo" },
+  cheese: { id: "no-cheese", name: "No Cheese" },
+  feta: { id: "no-feta", name: "No Feta" },
+  tomato: { id: "no-tomato", name: "No Tomato" },
+  lettuce: { id: "no-lettuce", name: "No Lettuce" },
+  pesto: { id: "no-pesto", name: "No Pesto" },
+  rocket: { id: "no-rocket", name: "No Rocket" },
+  pickles: { id: "no-pickles", name: "No Pickles" },
+  onion: { id: "no-onion", name: "No Onion" },
+  bacon: { id: "no-bacon", name: "No Bacon" },
+  avocado: { id: "no-avocado", name: "No Avocado" },
+  sauerkraut: { id: "no-sauerkraut", name: "No Sauerkraut" },
+  thousandIsland: { id: "no-thousand-island", name: "No Thousand Island Dressing" },
+  mozzarella: { id: "no-mozzarella", name: "No Mozzarella" },
+  sundriedTomato: { id: "no-sundried-tomato", name: "No Sundried Tomato" },
+  zucchini: { id: "no-zucchini", name: "No Zucchini" },
+  capsicum: { id: "no-capsicum", name: "No Capsicum (Pepper)" },
+  eggplant: { id: "no-eggplant", name: "No Eggplant" },
+  mortadella: { id: "no-mortadella", name: "No Mortadella" },
+  chicken: { id: "no-chicken", name: "No Chicken" },
+  cornedBeef: { id: "no-corned-beef", name: "No Corned Beef" },
+  beefPatty: { id: "no-beef-patty", name: "No Beef Patty" },
+  specialSauce: { id: "no-special-sauce", name: "No Special Sauce" },
+  slaw: { id: "no-slaw", name: "No Slaw" },
+  jalapeno: { id: "no-jalapeno", name: "No Jalapeños" },
+  chilliMayo: { id: "no-chilli-mayo", name: "No Chilli Mayo" },
+  caramelOnion: { id: "no-caramelised-onion", name: "No Caramelised Onion" },
+  scrambledEgg: { id: "no-scrambled-egg", name: "No Scrambled Egg" },
+  ham: { id: "no-ham", name: "No Ham" },
+  sauce: { id: "no-sauce", name: "No Sauce" },
+  eggFried: { id: "no-fried-egg", name: "No Fried Egg" },
+  spinach: { id: "no-spinach", name: "No Spinach" },
+  hashBrown: { id: "no-hash-brown", name: "No Hash Brown" },
+  halloumi: { id: "no-halloumi", name: "No Halloumi" },
+  schnitzel: { id: "no-schnitzel", name: "No Schnitzel" },
 };
 
-function burgerSides(bacon: "Bacon" | "Extra bacon"): RollAddOn[] {
+function burgerSides(bacon: "Bacon" | "Extra Bacon"): RollAddOn[] {
   return [
-    { id: "beef-patty", name: "Extra beef patty", priceCents: 500 },
-    { id: "chicken-protein", name: "Extra chicken", priceCents: 500 },
+    { id: "beef-patty", name: "Extra Beef Patty", priceCents: 500 },
+    { id: "chicken-protein", name: "Extra Chicken", priceCents: 500 },
     { id: "extra-bacon", name: bacon, priceCents: 400 },
-    { id: "cheese", name: "Extra cheese", priceCents: 150 },
-    { id: "hash-brown", name: "Hash brown", priceCents: 500 },
+    { id: "cheese", name: "Extra Cheese", priceCents: 150 },
+    { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
     { id: "egg", name: "Egg", priceCents: 200 },
     { id: "jalapenos", name: "Jalapeños", priceCents: 100 },
-    { id: "caramel-onion", name: "Caramelised onion", priceCents: 150 },
-    { id: "pickles", name: "Extra pickles", priceCents: 50 },
+    { id: "caramel-onion", name: "Caramelised Onion", priceCents: 150 },
+    { id: "pickles", name: "Extra Pickles", priceCents: 50 },
   ];
 }
 
-/** Plain toastie: optional rasher Bacon; Egg row when sandwich has none; Extra cheese atop listed ham and cheese slices. */
+/** Plain toastie: optional rasher Bacon; Egg row when sandwich has none; Extra Cheese atop listed ham and cheese slices. */
 const HAM_CHEESE_TOASTIE_ADDONS: RollAddOn[] = [
   { id: "extra-bacon", name: "Bacon", priceCents: 400 },
   { id: "extra-egg", name: "Egg", priceCents: 200 },
-  { id: "cheese", name: "Extra cheese", priceCents: 150 },
-  { id: "hash-brown", name: "Hash brown", priceCents: 500 },
+  { id: "cheese", name: "Extra Cheese", priceCents: 150 },
+  { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
 ];
 
 /** Avocado-only toastie. */
@@ -203,104 +203,102 @@ const AVOCADO_TOASTIE_ADDONS: RollAddOn[] = [
   { id: "extra-bacon", name: "Bacon", priceCents: 400 },
   { id: "extra-egg", name: "Egg", priceCents: 200 },
   { id: "cheese", name: "Cheese", priceCents: 150 },
-  { id: "hash-brown", name: "Hash brown", priceCents: 500 },
+  { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
 ];
 
 /** Halloumi wrap lists grilled halloumi + egg etc.; rashers Bacon, extra fried egg wording kept. */
 const HALLUMI_WRAP_ADDONS: RollAddOn[] = [
   { id: "avocado", name: "Avocado", priceCents: 400 },
   { id: "extra-bacon", name: "Bacon", priceCents: 400 },
-  { id: "extra-egg", name: "Extra egg", priceCents: 200 },
+  { id: "extra-egg", name: "Extra Egg", priceCents: 200 },
   { id: "cheese", name: "Cheese", priceCents: 150 },
-  { id: "hash-brown", name: "Hash brown", priceCents: 500 },
+  { id: "hash-brown", name: "Hash Brown", priceCents: 500 },
 ];
 
 /** Same ids as bacon & egg roll (variant sync / bundle exclusions). */
 const baconEggVariantsRoll: RollVariantChoice[] = [
   { id: "standard", label: "Bacon & Egg Roll", price: "$8.50", priceCents: 850 },
   { id: "double-bacon", label: "Double Bacon & Egg Roll", price: "$12.50", priceCents: 1250 },
-  { id: "cheese-hash", label: "With cheese & hash brown", price: "$15.00", priceCents: 1500 },
+  { id: "cheese-hash", label: "With Cheese & Hash Brown", price: "$15.00", priceCents: 1500 },
   {
     id: "monster",
-    label: "Monster roll (loaded)",
-    detail: "Double bacon, extra egg, cheese & hash brown",
+    label: "Monster Roll",
     price: "$18.90",
     priceCents: 1890,
   },
 ];
 
 const baconEggVariantsWrap: RollVariantChoice[] = [
-  { id: "standard", label: "Breakfast wrap", price: "$8.50", priceCents: 850 },
-  { id: "double-bacon", label: "Double bacon breakfast wrap", price: "$12.50", priceCents: 1250 },
-  { id: "cheese-hash", label: "With cheese & hash brown", price: "$15.00", priceCents: 1500 },
+  { id: "standard", label: "Breakfast Wrap", price: "$8.50", priceCents: 850 },
+  { id: "double-bacon", label: "Double Bacon Breakfast Wrap", price: "$12.50", priceCents: 1250 },
+  { id: "cheese-hash", label: "With Cheese & Hash Brown", price: "$15.00", priceCents: 1500 },
   {
     id: "monster",
-    label: "Monster wrap (loaded)",
-    detail: "Double bacon, extra egg, cheese & hash brown",
+    label: "Monster Wrap",
     price: "$18.90",
     priceCents: 1890,
   },
 ];
 
-/** Rolls + parity wraps share these rows; bundle rows ($0 “In bundle”) follow `excludeForVariantIds`. */
+/** Rolls + parity wraps share these rows; bundle rows follow `excludeForVariantIds`. */
 const baconEggStyleAddOns: RollAddOn[] = [
-  { id: "extra-bacon", name: "Extra bacon", priceCents: 400, excludeForVariantIds: ["double-bacon", "monster"] },
-  { id: "extra-egg", name: "Extra egg", priceCents: 200, excludeForVariantIds: ["monster"] },
+  { id: "extra-bacon", name: "Extra Bacon", priceCents: 400, excludeForVariantIds: ["double-bacon", "monster"] },
+  { id: "extra-egg", name: "Extra Egg", priceCents: 200, excludeForVariantIds: ["monster"] },
   { id: "cheese", name: "Cheese", priceCents: 150, excludeForVariantIds: ["cheese-hash", "monster"] },
-  { id: "hash-brown", name: "Hash brown", priceCents: 500, excludeForVariantIds: ["cheese-hash", "monster"] },
+  { id: "hash-brown", name: "Hash Brown", priceCents: 500, excludeForVariantIds: ["cheese-hash", "monster"] },
 ];
 
 const SAUCE_INCLUDED = "Included";
 
 /** Breakfast savoury picks that default open to BBQ in the customise modal. */
 const breakfastSauceBbqDefault: RollVariantChoice[] = [
-  { id: "sauce-bbq", label: "BBQ sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-tomato", label: "Tomato sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
   { id: "sauce-mayo", label: "Mayo", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-none", label: "No sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-none", label: "No Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 const breakfastSauceNoDefault: RollVariantChoice[] = [
-  { id: "sauce-none", label: "No sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-tomato", label: "Tomato sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-bbq", label: "BBQ sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-none", label: "No Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
   { id: "sauce-mayo", label: "Mayo", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 const sandwichSauceMayoDefault: RollVariantChoice[] = [
-  { id: "sauce-mayo", label: "Mayo (as listed)", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-tomato", label: "Tomato sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-bbq", label: "BBQ sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-none", label: "No sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-mayo", label: "Mayo (As Listed)", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-none", label: "No Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 /** Chicken + bacon build: BBQ reads more natural than mayo as the first tap. */
 const sandwichSauceChickenBaconDefault: RollVariantChoice[] = [
-  { id: "sauce-bbq", label: "BBQ sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-mayo", label: "Mayo (as listed)", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-tomato", label: "Tomato sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-none", label: "No sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-mayo", label: "Mayo (As Listed)", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-none", label: "No Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 const sandwichSauceThousandIslandDefault: RollVariantChoice[] = [
-  { id: "sauce-ti", label: "Thousand Island (as listed)", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-tomato", label: "Tomato sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-bbq", label: "BBQ sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-ti", label: "Thousand Island (As Listed)", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
   { id: "sauce-mayo", label: "Mayo", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-none", label: "No dressing / sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-none", label: "No Dressing / Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 const sandwichSaucePestoDefault: RollVariantChoice[] = [
-  { id: "sauce-pesto", label: "Basil pesto (as listed)", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-tomato", label: "Tomato sauce", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-bbq", label: "BBQ sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-pesto", label: "Basil Pesto (As Listed)", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-tomato", label: "Tomato Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-bbq", label: "BBQ Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
   { id: "sauce-mayo", label: "Mayo", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-none", label: "No sauce / spread", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-none", label: "No Sauce / Spread", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 const burgerSauceAmount: RollVariantChoice[] = [
-  { id: "sauce-amt-standard", label: "Standard amount", price: SAUCE_INCLUDED, priceCents: 0 },
-  { id: "sauce-amt-light", label: "Light on sauce", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-amt-standard", label: "Standard Amount", price: SAUCE_INCLUDED, priceCents: 0 },
+  { id: "sauce-amt-light", label: "Light On Sauce", price: SAUCE_INCLUDED, priceCents: 0 },
 ];
 
 type BurgerSauceListed = "special" | "chilli-mayo" | "mayo";
@@ -308,41 +306,41 @@ type BurgerSauceListed = "special" | "chilli-mayo" | "mayo";
 function burgerSaucePrimaries(baseCents: number, priceLabel: string, listed: BurgerSauceListed): RollVariantChoice[] {
   const specialAsListed: RollVariantChoice = {
     id: "sauce-as-listed",
-    label: "Special sauce (as listed)",
+    label: "Special Sauce (As Listed)",
     price: priceLabel,
     priceCents: baseCents,
   };
   const asListedChilliOrMayo: RollVariantChoice =
     listed === "chilli-mayo"
-      ? { id: "sauce-as-listed", label: "Chilli mayo (as listed)", price: priceLabel, priceCents: baseCents }
-      : { id: "sauce-as-listed", label: "Mayo (as listed)", price: priceLabel, priceCents: baseCents };
+      ? { id: "sauce-as-listed", label: "Chilli Mayo (As Listed)", price: priceLabel, priceCents: baseCents }
+      : { id: "sauce-as-listed", label: "Mayo (As Listed)", price: priceLabel, priceCents: baseCents };
 
   if (listed === "special") {
     return [
       specialAsListed,
-      { id: "sauce-bbq", label: "BBQ sauce", price: priceLabel, priceCents: baseCents },
-      { id: "sauce-tomato", label: "Tomato sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-bbq", label: "BBQ Sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-tomato", label: "Tomato Sauce", price: priceLabel, priceCents: baseCents },
       { id: "sauce-mayo", label: "Mayo", price: priceLabel, priceCents: baseCents },
-      { id: "sauce-none", label: "No sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-none", label: "No Sauce", price: priceLabel, priceCents: baseCents },
     ];
   }
 
   if (listed === "chilli-mayo") {
     return [
       asListedChilliOrMayo,
-      { id: "sauce-tomato", label: "Tomato sauce", price: priceLabel, priceCents: baseCents },
-      { id: "sauce-bbq", label: "BBQ sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-tomato", label: "Tomato Sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-bbq", label: "BBQ Sauce", price: priceLabel, priceCents: baseCents },
       { id: "sauce-mayo", label: "Mayo", price: priceLabel, priceCents: baseCents },
-      { id: "sauce-none", label: "No sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-none", label: "No Sauce", price: priceLabel, priceCents: baseCents },
     ];
   }
 
   if (listed === "mayo") {
     return [
       asListedChilliOrMayo,
-      { id: "sauce-tomato", label: "Tomato sauce", price: priceLabel, priceCents: baseCents },
-      { id: "sauce-bbq", label: "BBQ sauce", price: priceLabel, priceCents: baseCents },
-      { id: "sauce-none", label: "No sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-tomato", label: "Tomato Sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-bbq", label: "BBQ Sauce", price: priceLabel, priceCents: baseCents },
+      { id: "sauce-none", label: "No Sauce", price: priceLabel, priceCents: baseCents },
     ];
   }
 
@@ -363,7 +361,7 @@ function burgerCustom(
     priceCents: 0,
   }));
   return {
-    secondarySectionTitle: "How much sauce",
+    secondarySectionTitle: "How Much Sauce",
     secondaryChoices: burgerSauceAmount,
     sauceSectionTitle: "Sauce",
     sauceChoices: sauceAsIncluded,
@@ -374,17 +372,17 @@ function burgerCustom(
 }
 
 const coffeeStyle = (sizes: RollVariantChoice[]): ItemCustomizationConfig => ({
-  primarySectionTitle: "Choose size",
+  primarySectionTitle: "Choose Size",
   primaryChoices: sizes,
   milkOptions: MILK_STANDARD,
   addOns: COFFEE_DRINK_ADDONS,
 });
 
 const sandwichCustom = (addOns: RollAddOn[], removals: RemovalChoice[], sauceChoices: RollVariantChoice[]): ItemCustomizationConfig => ({
-  toastSectionTitle: "Toast level",
+  toastSectionTitle: "Toast Level",
   toastChoices: [
-    { id: "toast-std", label: "Standard toast", price: "$13.50", priceCents: 1350 },
-    { id: "toast-crisp", label: "Extra crispy toast", price: "$13.50", priceCents: 1350 },
+    { id: "toast-std", label: "Standard Toast", price: "$13.50", priceCents: 1350 },
+    { id: "toast-crisp", label: "Extra Crispy Toast", price: "$13.50", priceCents: 1350 },
   ],
   sauceSectionTitle: "Sauce",
   sauceChoices,
@@ -401,11 +399,11 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "bacon-egg-roll",
         name: "Bacon & Egg Roll",
-        description: "Crispy bacon, fried egg and sauce.",
+        description: "Crispy Bacon, Fried Egg And Sauce.",
         price: "From $8.50",
         popular: true,
         customization: {
-          primarySectionTitle: "Choose version",
+          primarySectionTitle: "Choose Version",
           primaryChoices: baconEggVariantsRoll,
           addOns: baconEggStyleAddOns,
           sauceSectionTitle: "Sauce",
@@ -416,10 +414,10 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "breakfast-wrap",
         name: "Breakfast Wrap",
-        description: "Bacon, scrambled egg and cheese.",
+        description: "Bacon, Scrambled Egg And Cheese.",
         price: "From $8.50",
         customization: {
-          primarySectionTitle: "Choose version",
+          primarySectionTitle: "Choose Version",
           primaryChoices: baconEggVariantsWrap,
           addOns: baconEggStyleAddOns,
           sauceSectionTitle: "Sauce",
@@ -430,7 +428,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "halloumi-breakfast-wrap",
         name: "Halloumi Breakfast Wrap",
-        description: "Grilled halloumi, fried egg, hash brown and spinach.",
+        description: "Grilled Halloumi, Fried Egg, Hash Brown And Spinach.",
         price: "$12.00",
         basePriceCents: 1200,
         customization: {
@@ -475,7 +473,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "grilled-chicken-sandwich",
         name: "Grilled Chicken Sandwich",
-        description: "Grilled chicken, avocado, lettuce, cheese & mayo",
+        description: "Grilled Chicken, Avocado, Lettuce, Cheese & Mayo",
         price: "$13.50",
         popular: true,
         basePriceCents: 1350,
@@ -488,7 +486,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "reuben-sandwich",
         name: "Reuben Sandwich",
-        description: "Corned beef, Swiss cheese, sauerkraut, gherkins, Thousand Island dressing",
+        description: "Corned Beef, Swiss Cheese, Sauerkraut, Gherkins, Thousand Island Dressing",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -500,7 +498,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "mortadella-sandwich",
         name: "Mortadella Sandwich",
-        description: "Mortadella, mozzarella, basil pesto, sundried tomato",
+        description: "Mortadella, Mozzarella, Basil Pesto, Sundried Tomato",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -512,7 +510,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "mediterranean-veggie-sandwich",
         name: "Mediterranean Veggie Sandwich",
-        description: "Grilled zucchini, roasted capsicum, eggplant, feta, basil pesto, rocket",
+        description: "Grilled Zucchini, Roasted Capsicum, Eggplant, Feta, Basil Pesto, Rocket",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -524,7 +522,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "blat",
         name: "BLAT",
-        description: "Bacon, lettuce, avocado, tomato & mayo",
+        description: "Bacon, Lettuce, Avocado, Tomato & Mayo",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -536,7 +534,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "chicken-bacon-sandwich",
         name: "Chicken Bacon Sandwich",
-        description: "Lettuce, tomato & mayo",
+        description: "Lettuce, Tomato & Mayo",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -548,7 +546,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "chicken-schnitzel-sandwich",
         name: "Chicken Schnitzel Sandwich",
-        description: "Lettuce, tomato & mayo",
+        description: "Lettuce, Tomato & Mayo",
         price: "$13.50",
         basePriceCents: 1350,
         customization: sandwichCustom(
@@ -566,7 +564,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "cheese-burger",
         name: "Cheese Burger",
-        description: "Beef patty, double cheese, tomato, pickles with special sauce",
+        description: "Beef Patty, Double Cheese, Tomato, Pickles With Special Sauce",
         price: "$12.90",
         basePriceCents: 1290,
         customization: burgerCustom(1290, "$12.90", "special", [
@@ -579,7 +577,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "cj-special-burger",
         name: "CJ Special Burger",
-        description: "Double beef, double cheese, bacon, caramelised onion, tomato, pickles, special sauce",
+        description: "Double Beef, Double Cheese, Bacon, Caramelised Onion, Tomato, Pickles, Special Sauce",
         price: "$16.90",
         popular: true,
         basePriceCents: 1690,
@@ -590,12 +588,12 @@ export const menuCategories: BoardMenuCategory[] = [
           rm.caramelOnion,
           rm.tomato,
           rm.pickles,
-        ], burgerSides("Extra bacon")),
+        ], burgerSides("Extra Bacon")),
       },
       {
         id: "crispy-chicken-burger",
         name: "Crispy Chicken Burger",
-        description: "Fried chicken, slaw, jalapeño with chilli mayo",
+        description: "Fried Chicken, Slaw, Jalapeño With Chilli Mayo",
         price: "$13.90",
         basePriceCents: 1390,
         customization: burgerCustom(1390, "$13.90", "chilli-mayo", [rm.chicken, rm.slaw, rm.jalapeno], burgerSides("Bacon")),
@@ -603,7 +601,7 @@ export const menuCategories: BoardMenuCategory[] = [
       {
         id: "grilled-chicken-burger",
         name: "Grilled Chicken Burger",
-        description: "Grilled chicken, tomato, lettuce, cheese with mayo",
+        description: "Grilled Chicken, Tomato, Lettuce, Cheese With Mayo",
         price: "$12.90",
         basePriceCents: 1290,
         customization: burgerCustom(1290, "$12.90", "mayo", [rm.chicken, rm.tomato, rm.lettuce, rm.cheese], burgerSides("Bacon")),
@@ -690,7 +688,7 @@ export const menuCategories: BoardMenuCategory[] = [
   },
   {
     id: "hot-drinks",
-    label: "Hot drinks",
+    label: "Hot Drinks",
     items: [
       {
         id: "hot-chocolate",
@@ -724,14 +722,11 @@ export const menuCategories: BoardMenuCategory[] = [
           addOns: COFFEE_DRINK_ADDONS.filter((a) => !["extra-shot", "decaf"].includes(a.id)),
         },
       },
-      { id: "extra-shot-menu", name: "Extra Shot or Decaf", description: "Per drink", price: "$0.50" },
-      { id: "alt-milk-menu", name: "Alternative Milks", description: "Soy, almond, oat, lactose free", price: "$1.00" },
-      { id: "syrup-menu", name: "Syrup", description: "Caramel, vanilla, hazelnut", price: "$1.00" },
     ],
   },
   {
     id: "cold-drinks",
-    label: "Cold drinks",
+    label: "Cold Drinks",
     items: [
       {
         id: "iced-long-black",
@@ -784,27 +779,27 @@ export const popularPicks: PopularPickHighlight[] = [
   {
     menuItemId: "bacon-egg-roll",
     photo: POPULAR_PHOTO_URLS.baconEggRoll,
-    description: "Crispy bacon, fried egg and sauce. Customise for Monster, double bacon, cheese & hash.",
+    description: "Crispy Bacon, Fried Egg And Sauce. Customise For Monster Roll, Double Bacon, Cheese & Hash.",
   },
   {
     menuItemId: "grilled-chicken-sandwich",
     photo: POPULAR_PHOTO_URLS.grilledChickenSandwich,
-    description: "Grilled chicken, avocado, lettuce, cheese and mayo.",
+    description: "Grilled Chicken, Avocado, Lettuce, Cheese And Mayo.",
   },
   {
     menuItemId: "cj-special-burger",
     photo: POPULAR_PHOTO_URLS.cjSpecialBurger,
-    description: "Double beef, bacon, caramelised onion and special sauce.",
+    description: "Double Beef, Bacon, Caramelised Onion And Special Sauce.",
   },
   {
     menuItemId: "flat-white",
     photo: POPULAR_PHOTO_URLS.flatWhite,
-    description: "Smooth espresso with velvety milk.",
+    description: "Smooth Espresso With Velvety Milk.",
   },
   {
     menuItemId: "iced-latte",
     photo: POPULAR_PHOTO_URLS.icedLatte,
-    description: "Cold, smooth and balanced.",
+    description: "Cold, Smooth And Balanced.",
   },
 ];
 

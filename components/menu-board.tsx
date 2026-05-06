@@ -1,19 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { useOrderCart } from "@/components/order-context";
 import type { BoardMenuCategory } from "@/lib/menu-data";
 
 export function MenuBoard({ categories, className = "mt-10" }: { categories: BoardMenuCategory[]; className?: string }) {
+  const categoryScrollRef = useRef<HTMLDivElement>(null);
   const [activeId, setActiveId] = useState(categories[0]?.id ?? "");
   const active = categories.find((c) => c.id === activeId) ?? categories[0];
   const { openCustomize } = useOrderCart();
 
+  useLayoutEffect(() => {
+    categoryScrollRef.current?.scrollTo({ left: 0 });
+  }, [categories]);
+
   return (
     <div className={className}>
-      <div className="-mx-1 flex justify-center overflow-x-auto px-1 pb-3 [scrollbar-width:thin]" aria-label="Menu categories">
-        <div className="mx-auto flex w-max max-w-none flex-nowrap justify-center gap-2">
+      <div
+        ref={categoryScrollRef}
+        className="-mx-1 flex overflow-x-auto scroll-px-4 px-1 pb-3 [scrollbar-width:thin]"
+        aria-label="Menu categories"
+      >
+        <div className="flex w-max min-w-max max-w-none flex-nowrap gap-2 pl-4 pr-4">
         {categories.map((cat) => {
           const isOn = cat.id === active.id;
           return (
@@ -21,7 +30,7 @@ export function MenuBoard({ categories, className = "mt-10" }: { categories: Boa
               key={cat.id}
               type="button"
               onClick={() => setActiveId(cat.id)}
-              className="relative shrink-0 rounded-full border px-5 py-2.5 text-sm font-bold transition-colors"
+              className="relative shrink-0 snap-start rounded-full border px-5 py-2.5 text-sm font-bold transition-colors"
               style={{
                 borderColor: isOn ? "transparent" : "rgba(255,122,0,0.35)",
                 color: isOn ? "var(--cj-charcoal)" : "var(--cj-cream)",

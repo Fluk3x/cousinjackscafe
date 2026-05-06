@@ -48,7 +48,7 @@ export function MenuCartStrip() {
             ))}
           </ul>
           <div className="mt-4 border-t border-[rgba(255,122,0,0.12)] pt-3 text-center">
-            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[var(--cj-cream)]/45">Subtotal mock</p>
+            <p className="text-[0.65rem] uppercase tracking-[0.2em] text-[var(--cj-cream)]/45">Subtotal</p>
             <p className="font-display text-xl font-semibold text-[var(--cj-gold)]">{audFromCents(subtotalCents)}</p>
           </div>
         </div>
