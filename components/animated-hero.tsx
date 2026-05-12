@@ -111,7 +111,7 @@ export function AnimatedHero() {
               alt=""
               width={200}
               height={240}
-              className="pointer-events-none absolute bottom-[15%] right-[38%] z-[1] w-[clamp(96px,16vw,140px)] select-none opacity-[0.92]"
+              className="pointer-events-none absolute bottom-[16%] right-[39%] z-[1] w-[clamp(96px,16vw,140px)] select-none opacity-[0.80]"
             />
           </div>
         </motion.div>
